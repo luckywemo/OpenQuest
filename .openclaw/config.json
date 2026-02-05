@@ -1,0 +1,40 @@
+{
+    "channels": {
+        "whatsapp": {
+            "enabled": true,
+            "allowFrom": [
+                "*"
+            ],
+            "groups": {
+                "*": {
+                    "requireMention": true
+                }
+            }
+        },
+        "telegram": {
+            "enabled": false,
+            "botToken": ""
+        },
+        "discord": {
+            "enabled": false,
+            "botToken": ""
+        }
+    },
+    "messages": {
+        "groupChat": {
+            "mentionPatterns": [
+                "@basequest",
+                "@quest",
+                "quest"
+            ]
+        }
+    },
+    "agent": {
+        "mode": "rpc",
+        "systemPrompt": "You are BaseQuest, an autonomous quest agent on the Base blockchain. You help users discover and complete onchain quests, track their progress, and claim rewards. Be friendly, helpful, and engaging. Focus on Base ecosystem protocols like Uniswap, Aerodrome, BasePaint, and others."
+    },
+    "gateway": {
+        "port": 18789,
+        "bind": "loopback"
+    }
+}
