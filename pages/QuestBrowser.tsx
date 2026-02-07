@@ -12,7 +12,7 @@ const QuestBrowser: React.FC = () => {
     const [selectedQuest, setSelectedQuest] = useState<any>(null);
 
     // Fee Configuration for Monetization
-    const feeRecipient = process.env.VITE_FEE_RECIPIENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+    const feeRecipient = import.meta.env.VITE_FEE_RECIPIENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
     const feeAmount = '1'; // 1%
 
     const mockQuests = [

@@ -7,7 +7,6 @@ import {
   AgentStats,
   ProjectSubmission
 } from '../types';
-import { generateNewQuest } from '../services/geminiService';
 import Header from '../components/Header';
 import StatsGrid from '../components/StatsGrid';
 import QuestCard from '../components/QuestCard';
@@ -82,14 +81,28 @@ const App: React.FC = () => {
         archiveQuest();
       }
 
-      addLog('Triggering Gemini generation for next quest cycle...', 'INFO');
-      const previousTitles = questHistory.slice(0, 5).map(q => q.title);
-      const newQuest = await generateNewQuest(previousTitles);
+      addLog('Triggering simulation for next quest cycle...', 'INFO');
 
-      // Check if fallback was used
-      if (newQuest.id.startsWith('q-fallback')) {
-        addLog('Gemini API unavailable, using pre-configured quest template.', 'ALERT');
-      }
+      // Mock quest generation for UI simulation
+      // Real generation happens via Vercel Cron
+      const newQuest: Quest = {
+        id: `q-sim-${Math.random().toString(36).substr(2, 9)}`,
+        title: "Standardized Base Quest",
+        description: "A placeholder quest for the simulation UI",
+        protocol: "BaseProtocol",
+        protocolUrl: "https://base.org",
+        actionRequired: "Perform a standard action",
+        targetContract: "0x0000000000000000000000000000000000000000",
+        rewardType: "ERC20",
+        rewardAmount: "10 QUEST",
+        difficulty: "EASY",
+        category: "DEFI",
+        startTime: Date.now(),
+        endTime: Date.now() + 24 * 60 * 60 * 1000,
+        status: QuestStatus.ACTIVE,
+        verificationLogic: "Mock verification",
+        completedCount: 0
+      };
 
       setActiveQuest(newQuest);
       addLog(`New Quest Deployed: "${newQuest.title}" [${newQuest.difficulty} - ${newQuest.category}]`, 'TRANSACTION', '0x' + Math.random().toString(16).substr(2, 64));
