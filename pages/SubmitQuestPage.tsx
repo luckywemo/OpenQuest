@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 interface QuestSubmission {
     projectName: string;
@@ -87,10 +88,12 @@ const SubmitQuestPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen py-12">
+        <div className="min-h-screen py-6">
             <div className="max-w-4xl mx-auto px-4">
-                {/* Header */}
-                <div className="mb-12">
+                <Header onOpenSubmit={() => { }} />
+
+                {/* Content */}
+                <div className="mt-12 mb-12">
                     <Link to="/" className="text-blue-400 hover:text-blue-300 mb-4 inline-block">
                         ← Back to Home
                     </Link>
