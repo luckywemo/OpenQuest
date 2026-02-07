@@ -30,7 +30,7 @@
     "recharts": "^3.7.0",
     "twitter-api-v2": "^1.29.0",
     "viem": "^2.45.1",
-    "wagmi": "^3.4.2"
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
