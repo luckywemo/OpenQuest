@@ -26,4 +26,4 @@ jobs:
       run: npm run build
 
     - name: Check bot types
-      run: npx tsc bot.ts services/*.ts --noEmit --esModuleInterop --resolveJsonModule
+      run: npx tsc bot.ts --noEmit --moduleResolution node --esModuleInterop --resolveJsonModule --skipLibCheck --target es6

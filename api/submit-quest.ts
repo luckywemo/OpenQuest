@@ -3,7 +3,7 @@
 
 import { addSubmission } from '../services/submissionService';
 
-export async function handleQuestSubmission(req: any, res: any) {
+export default async function handleQuestSubmission(req: any, res: any) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }

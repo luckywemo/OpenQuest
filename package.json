@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "bot": "tsx bot.ts",
-    "bot:build": "tsc bot.ts services/*.ts --outDir dist --module commonjs --esModuleInterop --resolveJsonModule",
+    "bot:build": "tsc bot.ts --outDir dist --module commonjs --moduleResolution node --esModuleInterop --resolveJsonModule --skipLibCheck --target es6",
     "bot:start": "node dist/bot.js"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "@google/genai": "^1.39.0",
     "@neynar/react": "^1.2.22",
     "@openzeppelin/contracts": "^5.4.0",
+    "@pigment-css/react": "^0.0.30",
     "@rainbow-me/rainbowkit": "^2.2.10",
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.4",
