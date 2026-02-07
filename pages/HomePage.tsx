@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icons } from '../constants';
 import { useAccount } from 'wagmi';
-import { useNeynarContext } from "@neynar/react";
+import { useProfile } from "@farcaster/auth-kit";
 
 const HomePage: React.FC = () => {
     const { isConnected } = useAccount();
-    const { user: neynarUser } = useNeynarContext();
-    const isUserAuthenticated = isConnected || !!neynarUser;
+    const { isAuthenticated } = useProfile();
+    const isUserAuthenticated = isConnected || isAuthenticated;
     return (
         <div className="min-h-screen flex flex-col">
             {/* Hero Section */}

@@ -3,15 +3,21 @@ import ReactDOM from 'react-dom/client';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { NeynarContextProvider, Theme } from "@neynar/react";
 import { base } from 'wagmi/chains';
 import App from './App';
 import { config } from './wagmi';
 
 import '@coinbase/onchainkit/styles.css';
-import "@neynar/react/dist/style.css";
+import { AuthKitProvider } from '@farcaster/auth-kit';
+import '@farcaster/auth-kit/styles.css';
 
 const queryClient = new QueryClient();
+
+const farcasterConfig = {
+  rpcUrl: 'https://mainnet.optimism.io', // Farcaster is on Optimism
+  domain: window.location.host,
+  siweUri: `${window.location.origin}/login`,
+};
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -27,22 +33,9 @@ root.render(
           apiKey={import.meta.env.VITE_CDP_API_KEY}
           chain={base}
         >
-          <NeynarContextProvider
-            settings={{
-              clientId: import.meta.env.VITE_NEYNAR_CLIENT_ID || "",
-              defaultTheme: Theme.Dark,
-              eventsCallbacks: {
-                onAuthSuccess: () => {
-                  console.log("Neynar Auth Success");
-                },
-                onSignout() {
-                  console.log("Neynar Signout");
-                },
-              },
-            }}
-          >
+          <AuthKitProvider config={farcasterConfig}>
             <App />
-          </NeynarContextProvider>
+          </AuthKitProvider>
         </OnchainKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

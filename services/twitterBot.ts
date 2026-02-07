@@ -100,8 +100,12 @@ export async function startMentionListener(botUsername: string) {
         // Poll for mentions every 60 seconds
         setInterval(async () => {
             try {
-                // Search for recent mentions (last 30 seconds)
-                const mentions = await v2Client.search(`@${botUsername}`, {
+                // Get our own user ID if we don't have it
+                const me = await v2Client.me();
+                const myId = me.data.id;
+
+                // Search for mentions using the mentions timeline instead of search (Free tier compatible)
+                const mentions = await v2Client.userMentionTimeline(myId, {
                     max_results: 10,
                     'tweet.fields': ['author_id', 'created_at'],
                     'user.fields': ['username'],
@@ -119,9 +123,8 @@ export async function startMentionListener(botUsername: string) {
                     const userId = tweet.author_id!;
                     const username = mentions.data.includes?.users?.find(u => u.id === userId)?.username || 'user';
 
-                    // Skip our own tweets
-                    const me = await v2Client.me();
-                    if (userId === me.data.id) continue;
+                    // Skip our own tweets (though mentions timeline shouldn't include them unless tagged)
+                    if (userId === myId) continue;
 
                     console.log(`📥 Mention from @${username}: ${text}`);
 
@@ -134,7 +137,7 @@ export async function startMentionListener(botUsername: string) {
             } catch (error: any) {
                 // Silently handle rate limits and transient errors
                 if (error.code !== 429) {
-                    console.error('Error checking mentions:', error.message);
+                    // console.error('Error checking mentions:', error.message);
                 }
             }
         }, 30000); // Check every 30 seconds
@@ -338,7 +341,7 @@ export async function startDMListener() {
                 }
             }
         } catch (error) {
-            console.error('DM listener error:', error);
+            // console.error('DM listener error:', error);
         }
     }, 15000);
 

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swap, SwapAmountInput, SwapToggleButton, SwapButton, SwapMessage } from '@coinbase/onchainkit/swap';
 import { useAccount } from 'wagmi';
-import { useNeynarContext } from "@neynar/react";
+import { useProfile } from "@farcaster/auth-kit";
 import Header from '../components/Header';
 
 const QuestBrowser: React.FC = () => {
     const { isConnected } = useAccount();
-    const { user: neynarUser } = useNeynarContext();
-    const isUserAuthenticated = isConnected || !!neynarUser;
+    const { isAuthenticated } = useProfile();
+    const isUserAuthenticated = isConnected || isAuthenticated;
     const [selectedQuest, setSelectedQuest] = useState<any>(null);
 
     // Fee Configuration for Monetization

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
-import { useNeynarContext } from "@neynar/react";
+import { useProfile } from "@farcaster/auth-kit";
 
 const ProfilePage: React.FC = () => {
     const { address, isConnected } = useAccount();
-    const { user: neynarUser } = useNeynarContext();
+    const { isAuthenticated, profile } = useProfile();
     const { disconnect } = useDisconnect();
 
-    if ((!isConnected || !address) && !neynarUser) {
+    if ((!isConnected || !address) && !isAuthenticated) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center max-w-md">
@@ -35,11 +35,11 @@ const ProfilePage: React.FC = () => {
         );
     }
 
-    // Authenticated view (Real data from Neynar and Wagmi)
+    // Authenticated view (Real data from Farcaster and Wagmi)
     const user = {
-        username: neynarUser?.display_name || 'User',
-        fid: neynarUser?.fid || 'N/A',
-        pfp: neynarUser?.pfp_url || 'https://i.pravatar.cc/150?img=3',
+        username: profile?.displayName || profile?.username || 'User',
+        fid: profile?.fid || 'N/A',
+        pfp: profile?.pfpUrl || 'https://i.pravatar.cc/150?img=3',
         wallet: address || 'N/A'
     };
 

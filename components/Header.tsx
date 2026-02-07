@@ -15,7 +15,7 @@ import {
   Identity,
   EthBalance,
 } from '@coinbase/onchainkit/identity';
-import { NeynarAuthButton } from "@neynar/react";
+import { SignInButton } from "@farcaster/auth-kit";
 
 interface HeaderProps {
   onOpenSubmit: () => void;
@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
               </div>
               <h3 className="text-2xl font-bold mb-4">Link Your X / Twitter</h3>
               <p className="text-slate-400 text-sm mb-8 leading-relaxed">
-                To link your X account, please DM our bot <span className="text-blue-400 font-bold">@bosibibai</span> with your wallet address:
+                To link your X account, please DM our bot <span className="text-blue-400 font-bold">@openquestbot</span> with your wallet address:
               </p>
               <div className="bg-white/5 p-4 rounded-xl border border-white/10 font-mono text-xs text-blue-300 mb-8 select-all cursor-copy">
                 link [your-address]
@@ -104,34 +104,9 @@ const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
             <Twitter size={14} className="text-slate-400 group-hover:text-blue-400" />
           </button>
 
-          {/* Farcaster Button (Neynar Integration) */}
-          <div className="neynar-custom-button relative">
-            <style dangerouslySetInnerHTML={{
-              __html: `
-              .neynar-custom-button button {
-                position: relative !important;
-                color: transparent !important;
-              }
-              .neynar-custom-button button::after {
-                content: 'Sign in with Farcaster' !important;
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                color: white !important;
-                font-weight: bold !important;
-                font-size: 14px !important;
-                pointer-events: none !important;
-              }
-            `}} />
-            <NeynarAuthButton
-              label="Sign in with Farcaster"
-              variant="farcaster"
-            />
+          {/* Farcaster Button (Native Auth Kit) */}
+          <div className="farcaster-native-button">
+            <SignInButton />
           </div>
 
           {/* Wallet & Social (OnchainKit) */}

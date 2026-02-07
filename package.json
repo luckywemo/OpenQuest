@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "@coinbase/onchainkit": "^1.1.2",
+    "@farcaster/auth-client": "^0.7.1",
+    "@farcaster/auth-kit": "^0.8.2",
     "@google/genai": "^1.39.0",
-    "@neynar/react": "^1.2.22",
     "@openzeppelin/contracts": "^5.4.0",
     "@pigment-css/react": "^0.0.30",
     "@rainbow-me/rainbowkit": "^2.2.10",
