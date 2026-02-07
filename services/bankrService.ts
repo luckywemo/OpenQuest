@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
 import path from 'path';
 
 interface BankrConfig {
@@ -18,11 +18,36 @@ const CONFIG_PATH = path.join(process.cwd(), '.skills', 'bankr', 'config.json');
 const SCRIPT_PATH = path.join(process.cwd(), '.skills', 'bankr', 'scripts', 'bankr.sh');
 
 /**
- * Load Bankr configuration from config.json
+ * Load Bankr configuration. First checks .env, then syncs to config.json if needed.
  */
 function loadConfig(): BankrConfig | null {
+    const envKey = process.env.BANKR_API_KEY;
+    const envUrl = process.env.BANKR_API_URL || 'https://api.bankr.bot';
+
+    // If API key is in .env and is not the placeholder, use it and sync to file
+    if (envKey && envKey !== 'PASTE_YOUR_BK_KEY_HERE') {
+        const config: BankrConfig = {
+            apiKey: envKey,
+            apiUrl: envUrl
+        };
+
+        // Sync to config.json so shell scripts can use it
+        try {
+            const dir = path.dirname(CONFIG_PATH);
+            if (!existsSync(dir)) {
+                mkdirSync(dir, { recursive: true });
+            }
+            writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+        } catch (error) {
+            console.error('⚠️ Failed to sync Bankr config to file:', error);
+        }
+
+        return config;
+    }
+
+    // Fallback to existing config.json
     if (!existsSync(CONFIG_PATH)) {
-        console.warn('⚠️ Bankr config not found. Please set up your API key at .skills/bankr/config.json');
+        console.warn('⚠️ Bankr config not found in .env or config.json');
         return null;
     }
 

@@ -27,8 +27,9 @@ const twitterClient = new TwitterApi({
     accessSecret: process.env.TWITTER_ACCESS_SECRET,
 });
 
-const rwClient = twitterClient.readWrite;
-const v2Client = rwClient.v2;
+// v1.1 and v2 clients
+const v1Client = twitterClient.v1;
+const v2Client = twitterClient.v2;
 
 // Initialize Gemini AI
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
@@ -138,29 +139,28 @@ export async function startMentionListener(botUsername: string) {
     }
 }
 
-// ============================================
-// HANDLE MENTIONS
-// ============================================
+import openclawAgent from './openclawAgent';
 
+// ... inside handleMention ...
 async function handleMention(tweetId: string, userId: string, username: string, text: string) {
-    const lowerText = text.toLowerCase();
+    const cleanText = text.replace(/@\w+/g, '').trim();
 
     try {
-        // Command routing
-        if (lowerText.includes('quest') && !lowerText.includes('basequest')) {
-            await handleQuestsCommand(tweetId, userId, username);
-        } else if (lowerText.includes('stats') || lowerText.includes('profile')) {
-            await handleStatsCommand(tweetId, userId, username);
-        } else if (lowerText.includes('how') || lowerText.includes('help')) {
-            await handleHowCommand(tweetId, userId, username);
-        } else if (lowerText.includes('claim')) {
-            await handleClaimCommand(tweetId, userId, username);
-        } else if (lowerText.includes('leaderboard') || lowerText.includes('top')) {
-            await handleLeaderboardCommand(tweetId);
-        } else {
-            // AI-powered response for other mentions
-            await handleAIResponse(tweetId, userId, username, text);
+        // Use the common OpenClaw agent logic for all commands (Quests, Stats, Claim, Bankr, etc.)
+        const response = await openclawAgent.handleMessage(
+            cleanText || "help",
+            userId,
+            'twitter',
+            username
+        );
+
+        // Ensure response fits in a tweet (280 chars)
+        let reply = `@${username} ${response}`;
+        if (reply.length > 280) {
+            reply = reply.substring(0, 277) + '...';
         }
+
+        await v2Client.reply(reply, tweetId);
     } catch (error) {
         console.error(`Error handling mention from @${username}:`, error);
     }
@@ -312,7 +312,7 @@ export async function startDMListener() {
     // Poll for DMs every 30 seconds
     setInterval(async () => {
         try {
-            const dms = await rwClient.v1.listDmEvents({ count: 50 });
+            const dms = await (v1Client as any).listDmEvents({ count: 50 });
 
             if (!dms.events) return;
 
@@ -365,7 +365,7 @@ Mention me with "quests" to see what's active! 🎯`);
 
 async function sendDM(recipientId: string, text: string) {
     try {
-        await rwClient.v1.sendDm({
+        await (v1Client as any).sendDm({
             recipient_id: recipientId,
             text: text
         });

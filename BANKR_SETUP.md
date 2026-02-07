@@ -18,22 +18,17 @@ Bankr is an AI-powered crypto trading agent that enables natural language tradin
 
 ### 2. Configure the Bankr Skill
 
-Create the configuration file:
+Open your `.env` file and find the `BANKR_API_KEY` section:
 
 ```bash
-# Create config directory if it doesn't exist
-mkdir -p .skills/bankr
-
-# Create config.json with your API key
-cat > .skills/bankr/config.json << 'EOF'
-{
-  "apiKey": "bk_YOUR_ACTUAL_API_KEY_HERE",
-  "apiUrl": "https://api.bankr.bot"
-}
-EOF
+# .env
+BANKR_API_KEY=bk_YOUR_ACTUAL_API_KEY_HERE
+BANKR_API_URL=https://api.bankr.bot
 ```
 
 Replace `bk_YOUR_ACTUAL_API_KEY_HERE` with your actual Bankr API key.
+
+The `bankrService.ts` will automatically sync this key to the skill's local configuration file (`.skills/bankr/config.json`) when the application starts, so you don't need to edit any other files.
 
 ### 3. Test the Integration
 

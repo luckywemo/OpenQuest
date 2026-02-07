@@ -54,12 +54,16 @@ async function startTwitterBot() {
         console.log('');
         console.log('💬 User interaction via OpenClaw (WhatsApp/Telegram/Discord)');
 
+        // Start listening for mentions and DMs
+        twitterBot.startMentionListener(config.twitter.botUsername);
+        twitterBot.startDMListener();
+
         // Schedule daily stats tweet (every 24 hours)
         setInterval(() => {
             twitterBot.tweetDailyStats();
         }, 24 * 60 * 60 * 1000);
 
-        console.log('✅ Twitter bot ready (announcement-only mode)');
+        console.log(`✅ Twitter bot ready (@${config.twitter.botUsername})`);
     } catch (error) {
         console.error('❌ Failed to start Twitter bot:', error);
     }
