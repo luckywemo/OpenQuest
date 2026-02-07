@@ -13,10 +13,12 @@
     "bot:start": "node dist/bot.js"
   },
   "dependencies": {
+    "@coinbase/onchainkit": "^1.1.2",
     "@google/genai": "^1.39.0",
     "@neynar/react": "^1.2.22",
     "@openzeppelin/contracts": "^5.4.0",
     "@rainbow-me/rainbowkit": "^2.2.10",
+    "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.4",
     "cheerio": "^1.2.0",
     "dotenv": "^17.2.3",
@@ -28,7 +30,7 @@
     "recharts": "^3.7.0",
     "twitter-api-v2": "^1.29.0",
     "viem": "^2.45.1",
-    "wagmi": "^2.19.5"
+    "wagmi": "^3.4.2"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",

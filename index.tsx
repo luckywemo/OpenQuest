@@ -1,7 +1,15 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { base } from 'wagmi/chains';
 import App from './App';
+import { config } from './wagmi';
+
+import '@coinbase/onchainkit/styles.css';
+
+const queryClient = new QueryClient();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -11,6 +19,15 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <OnchainKitProvider
+          apiKey={import.meta.env.VITE_CDP_API_KEY}
+          chain={base}
+        >
+          <App />
+        </OnchainKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   </React.StrictMode>
 );
