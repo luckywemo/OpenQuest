@@ -31,8 +31,14 @@ const twitterClient = new TwitterApi({
 const v1Client = twitterClient.v1;
 const v2Client = twitterClient.v2;
 
-// Initialize Gemini AI
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+// Initialize Gemini AI lazily
+let aiInstance: GoogleGenAI | null = null;
+function getAi() {
+    if (!aiInstance) {
+        aiInstance = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    }
+    return aiInstance;
+}
 
 // Storage for user wallet addresses (use Redis/DB in production)
 const userWallets = new Map<string, string>();
@@ -275,7 +281,7 @@ User @${username} mentioned: "${text}"
 Respond helpfully in 280 characters or less. Focus on Base ecosystem quests.
 Be friendly and use emojis. Start with @${username}`;
 
-        const response = await ai.models.generateContent({
+        const response = await getAi().models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: prompt
         });

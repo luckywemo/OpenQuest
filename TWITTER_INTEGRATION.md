@@ -34,7 +34,7 @@ TWITTER_ACCESS_SECRET=your_access_secret_here
 TWITTER_BEARER_TOKEN=your_bearer_token_here
 
 # Bot configuration
-TWITTER_BOT_USERNAME=BaseQuestBot
+TWITTER_BOT_USERNAME=OpenQuestBot
 ENABLE_TWITTER=true
 
 # Keep Gemini key
@@ -61,9 +61,9 @@ node dist/bot.js
 ### **Mentions**
 
 ```
-User: @BaseQuestBot quests
+User: @OpenQuestBot quests
 
-BaseQuestBot: @user 🎯 Active Quests:
+OpenQuestBot: @user 🎯 Active Quests:
 
 1️⃣ Swap on Uniswap Base
    🟢 EASY | 💱 DEFI
@@ -78,9 +78,9 @@ More: basequest.app
 ```
 
 ```
-User: @BaseQuestBot how do quests work?
+User: @OpenQuestBot how do quests work?
 
-BaseQuestBot: @user 📖 How BaseQuest Works:
+OpenQuestBot: @user 📖 How BaseQuest Works:
 
 1️⃣ DM me: "link 0xYourAddress"
 2️⃣ Complete onchain actions (swap, mint, etc)
@@ -91,9 +91,9 @@ Start: basequest.app
 ```
 
 ```
-User: @BaseQuestBot stats
+User: @OpenQuestBot stats
 
-BaseQuestBot: @user 📊 Your Stats:
+OpenQuestBot: @user 📊 Your Stats:
 
 ✅ Completed: 5 quests
 🎁 Rewards: 4 claimed
@@ -108,7 +108,7 @@ Keep crushing it! 💪
 ```
 User DM: link 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 
-BaseQuestBot DM: ✅ Wallet linked!
+OpenQuestBot DM: ✅ Wallet linked!
 
 Address: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 
@@ -126,7 +126,7 @@ Mention me with "quests" to see what's active! 🎯
 When a new quest is created:
 
 ```
-BaseQuestBot: 🎯 NEW QUEST LIVE ON BASE
+OpenQuestBot: 🎯 NEW QUEST LIVE ON BASE
 
 Swap on Uniswap Base
 
@@ -144,7 +144,7 @@ Reply "how" to learn more! 👇
 When someone completes a quest:
 
 ```
-BaseQuestBot: 🎉 QUEST COMPLETED!
+OpenQuestBot: 🎉 QUEST COMPLETED!
 
 @cryptowhale just crushed:
 "Swap on Uniswap Base"
@@ -162,13 +162,13 @@ Reply "claim" to get your reward!
 
 | Mention Command | Response |
 |----------------|----------|
-| `@BaseQuestBot quests` | Shows active quests |
-| `@BaseQuestBot stats` | Shows user's statistics |
-| `@BaseQuestBot how` | Explains how quests work |
-| `@BaseQuestBot help` | Lists all commands |
-| `@BaseQuestBot claim` | Claims rewards |
-| `@BaseQuestBot leaderboard` | Shows top users |
-| `@BaseQuestBot [anything else]` | AI-powered response via Gemini |
+| `@OpenQuestBot quests` | Shows active quests |
+| `@OpenQuestBot stats` | Shows user's statistics |
+| `@OpenQuestBot how` | Explains how quests work |
+| `@OpenQuestBot help` | Lists all commands |
+| `@OpenQuestBot claim` | Claims rewards |
+| `@OpenQuestBot leaderboard` | Shows top users |
+| `@OpenQuestBot [anything else]` | AI-powered response via Gemini |
 
 | DM Command | Response |
 |-----------|----------|
@@ -244,7 +244,7 @@ TWITTER_BEARER_TOKEN=xxx
 GEMINI_API_KEY=xxx
 
 # Optional
-TWITTER_BOT_USERNAME=BaseQuestBot
+TWITTER_BOT_USERNAME=OpenQuestBot
 ENABLE_TWITTER=true
 ENABLE_AUTO_QUESTS=true
 QUEST_INTERVAL_HOURS=24
@@ -375,7 +375,7 @@ await v2Client.tweet(`
 
 First 100 to complete get 2x rewards!
 
-Follow @BaseQuestBot and reply "in" to join
+Follow @OpenQuestBot and reply "in" to join
 
 #BaseQuest
 `);

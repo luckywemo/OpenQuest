@@ -3,12 +3,22 @@
  * Uses Gemini AI to evaluate user-submitted content (articles, threads, etc.)
  */
 
+import dotenv from 'dotenv';
 import { GoogleGenAI } from "@google/genai";
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-// Initialize Gemini AI
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+// Initialize Gemini AI lazily
+let aiInstance: GoogleGenAI | null = null;
+function getAi() {
+    if (!aiInstance) {
+        if (!process.env.GEMINI_API_KEY) {
+            dotenv.config();
+        }
+        aiInstance = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    }
+    return aiInstance;
+}
 
 interface EvaluationResult {
     score: number;
@@ -82,7 +92,7 @@ export async function evaluateContent(
             - isApproved: (boolean, true if score >= 70)
         `;
 
-        const response = await ai.models.generateContent({
+        const response = await getAi().models.generateContent({
             model: 'gemini-1.5-flash',
             contents: `${prompt}`
         });

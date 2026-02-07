@@ -9,8 +9,14 @@ import { Quest, QuestStatus } from "../types";
 import aiJudgeService from "./aiJudgeService";
 import { executeBankrCommand, getBankrHelp, isBankrAvailable } from "./bankrService";
 
-// Initialize Gemini AI
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Initialize Gemini AI lazily
+let aiInstance: GoogleGenAI | null = null;
+function getAi() {
+    if (!aiInstance) {
+        aiInstance = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    }
+    return aiInstance;
+}
 
 // Storage for user wallet addresses (use Redis/DB in production)
 const userWallets = new Map<string, string>();
@@ -326,7 +332,8 @@ Available Commands:
 
         const conversationText = history.map(h => `${h.role === 'user' ? 'User' : 'BaseQuest'}: ${h.content}`).join('\n');
 
-        const response = await ai.models.generateContent({
+        // Use getAi().models.generateContent
+        const response = await getAi().models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: `${systemPrompt}\n\nConversation:\n${conversationText}\n\nBaseQuest:`
         });

@@ -1,13 +1,13 @@
 import { http, createConfig } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { coinbaseWallet } from 'wagmi/connectors';
+import { coinbaseWallet, injected } from 'wagmi/connectors';
 
 export const config = createConfig({
     chains: [base],
     connectors: [
+        injected(),
         coinbaseWallet({
-            appName: 'BaseQuest',
-            preference: 'smartWalletOnly',
+            appName: 'OpenQuest',
         }),
     ],
     transports: {

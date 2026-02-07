@@ -23,7 +23,7 @@ const config = {
     },
     twitter: {
         enabled: process.env.ENABLE_TWITTER === 'true',
-        botUsername: process.env.TWITTER_BOT_USERNAME || 'BaseQuestBot'
+        botUsername: process.env.TWITTER_BOT_USERNAME || 'OpenQuestBot'
     },
     farcaster: {
         enabled: process.env.ENABLE_FARCASTER === 'true'

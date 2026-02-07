@@ -6,7 +6,7 @@
 **File**: `services/twitterBot.ts`
 
 **Features:**
-- ✅ Mention listening (`@BaseQuestBot quests`)
+- ✅ Mention listening (`@OpenQuestBot quests`)
 - ✅ DM support for wallet linking
 - ✅ Auto quest announcements
 - ✅ Completion celebrations
@@ -70,7 +70,7 @@ TWITTER_API_KEY=your_key
 TWITTER_API_SECRET=your_secret  
 TWITTER_ACCESS_TOKEN=your_token
 TWITTER_ACCESS_SECRET=your_secret
-TWITTER_BOT_USERNAME=BaseQuestBot
+TWITTER_BOT_USERNAME=OpenQuestBot
 ENABLE_TWITTER=true
 
 # OpenClaw (optional)
@@ -176,13 +176,13 @@ BaseQuest/
 ### Via Twitter:
 
 ```
-1. User: @BaseQuestBot quests
+1. User: @OpenQuestBot quests
 2. Bot: Shows active quests
 3. User: DMs "link 0x742d..."
 4. Bot: ✅ Wallet linked
 5. [User completes swap on Uniswap]
 6. Bot: 🎉 Quest completed! @user
-7. User: @BaseQuestBot claim
+7. User: @OpenQuestBot claim
 8. Bot: Reward sent! TX: 0x...
 ```
 

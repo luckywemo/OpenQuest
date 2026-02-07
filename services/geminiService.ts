@@ -1,8 +1,14 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Quest, QuestStatus } from "../types";
 
-// Always use process.env.API_KEY directly during initialization
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Initialize Gemini AI lazily
+let genAIInstance: GoogleGenAI | null = null;
+function getGenAI() {
+  if (!genAIInstance) {
+    genAIInstance = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+  }
+  return genAIInstance;
+}
 
 // Fallback quests if Gemini API fails
 const FALLBACK_QUESTS: Omit<Quest, 'id' | 'startTime' | 'endTime' | 'status' | 'completedCount'>[] = [
@@ -91,8 +97,8 @@ QUEST REQUIREMENTS:
 
 Return a complete quest as JSON.`;
 
-    // Use ai.models.generateContent with enhanced schema
-    const response = await ai.models.generateContent({
+    // Use getGenAI().models.generateContent
+    const response = await getGenAI().models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {

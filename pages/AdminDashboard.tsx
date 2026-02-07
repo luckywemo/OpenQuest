@@ -26,7 +26,7 @@ import {
 } from 'recharts';
 
 const INITIAL_LOGS: LogType[] = [
-  { id: '1', timestamp: Date.now() - 5000, type: 'INFO', message: 'BaseQuest autonomous loop initialized.' },
+  { id: '1', timestamp: Date.now() - 5000, type: 'INFO', message: 'OpenQuest autonomous loop initialized.' },
   { id: '2', timestamp: Date.now() - 4000, type: 'INFO', message: 'Checking wallet balance on Base: 1.42 ETH.' },
   { id: '3', timestamp: Date.now() - 3000, type: 'VERIFICATION', message: 'Scanning recent events for Aerodrome LP interactions...' },
 ];
