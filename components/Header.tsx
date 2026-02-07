@@ -105,7 +105,29 @@ const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
           </button>
 
           {/* Farcaster Button (Neynar Integration) */}
-          <div className="neynar-custom-button">
+          <div className="neynar-custom-button relative">
+            <style dangerouslySetInnerHTML={{
+              __html: `
+              .neynar-custom-button button {
+                position: relative !important;
+                color: transparent !important;
+              }
+              .neynar-custom-button button::after {
+                content: 'Sign in with Farcaster' !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                color: white !important;
+                font-weight: bold !important;
+                font-size: 14px !important;
+                pointer-events: none !important;
+              }
+            `}} />
             <NeynarAuthButton
               label="Sign in with Farcaster"
               variant="farcaster"

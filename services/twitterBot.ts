@@ -100,7 +100,7 @@ export async function startMentionListener(botUsername: string) {
         // Poll for mentions every 60 seconds
         setInterval(async () => {
             try {
-                // Search for recent mentions (last 60 seconds)
+                // Search for recent mentions (last 30 seconds)
                 const mentions = await v2Client.search(`@${botUsername}`, {
                     max_results: 10,
                     'tweet.fields': ['author_id', 'created_at'],
@@ -137,7 +137,7 @@ export async function startMentionListener(botUsername: string) {
                     console.error('Error checking mentions:', error.message);
                 }
             }
-        }, 60000); // Check every 60 seconds
+        }, 30000); // Check every 30 seconds
 
         console.log('✅ Twitter mention listener started (polling mode)');
     } catch (error) {
@@ -315,7 +315,7 @@ Be friendly and use emojis. Start with @${username}`;
 export async function startDMListener() {
     console.log('💬 Starting Twitter DM listener...');
 
-    // Poll for DMs every 30 seconds
+    // Poll for DMs every 15 seconds
     setInterval(async () => {
         try {
             const dms = await (v1Client as any).listDmEvents({ count: 50 });
@@ -340,7 +340,7 @@ export async function startDMListener() {
         } catch (error) {
             console.error('DM listener error:', error);
         }
-    }, 30000);
+    }, 15000);
 
     console.log('✅ Twitter DM listener started');
 }
