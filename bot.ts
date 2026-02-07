@@ -9,6 +9,7 @@ dotenv.config();
 
 import openclawAgent from './services/openclawAgent';
 import twitterBot from './services/twitterBot';
+import farcasterBot from './services/farcasterBot';
 import { generateNewQuest } from './services/geminiService';
 
 // ============================================
@@ -23,6 +24,9 @@ const config = {
     twitter: {
         enabled: process.env.ENABLE_TWITTER === 'true',
         botUsername: process.env.TWITTER_BOT_USERNAME || 'BaseQuestBot'
+    },
+    farcaster: {
+        enabled: process.env.ENABLE_FARCASTER === 'true'
     },
     questGeneration: {
         enabled: process.env.ENABLE_AUTO_QUESTS === 'true',
@@ -59,6 +63,23 @@ async function startTwitterBot() {
     } catch (error) {
         console.error('❌ Failed to start Twitter bot:', error);
     }
+}
+
+async function startFarcasterBot() {
+    if (!config.farcaster.enabled) {
+        console.log('⏭️  Farcaster bot disabled');
+        return;
+    }
+
+    console.log('🟣 Starting Farcaster bot (announcement mode)...');
+    console.log('📣 Farcaster will post:');
+    console.log('   ✅ Quest announcements');
+    console.log('   ✅ Completion celebrations');
+
+    // Start listening for mentions/replies
+    farcasterBot.startMentionListener();
+
+    console.log('✅ Farcaster bot ready');
 }
 
 async function startOpenClawIntegration() {
@@ -106,6 +127,11 @@ async function startAutoQuestGeneration() {
                 await twitterBot.announceNewQuest(quest);
             }
 
+            // Announce on Farcaster
+            if (config.farcaster.enabled) {
+                await farcasterBot.announceNewQuest(quest);
+            }
+
             // Note: OpenClaw users will see quests when they ask
             // You could also implement push notifications here
 
@@ -145,6 +171,7 @@ async function main() {
 
     // Start all services
     await startTwitterBot();
+    await startFarcasterBot();
     await startOpenClawIntegration();
     await startAutoQuestGeneration();
 

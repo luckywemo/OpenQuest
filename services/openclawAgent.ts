@@ -5,7 +5,9 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { ethers } from "ethers";
-import type { Quest } from "../types";
+import { Quest, QuestStatus } from "../types";
+import aiJudgeService from "./aiJudgeService";
+import { executeBankrCommand, getBankrHelp, isBankrAvailable } from "./bankrService";
 
 // Initialize Gemini AI
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -45,12 +47,27 @@ export async function handleOpenClawMessage(
         return await handleClaimRequest(senderId, message);
     }
 
+    if (lowerMessage.startsWith("submit")) {
+        return await handleSubmitRequest(senderId, message);
+    }
+
     if (lowerMessage === "help" || lowerMessage === "how") {
         return getHelpMessage();
     }
 
     if (lowerMessage === "leaderboard" || lowerMessage === "top") {
         return await handleLeaderboardRequest();
+    }
+
+    // Bankr trading commands
+    if (lowerMessage.startsWith("bankr ") ||
+        lowerMessage.startsWith("trade ") ||
+        lowerMessage.startsWith("buy ") ||
+        lowerMessage.startsWith("sell ") ||
+        lowerMessage.startsWith("swap ") ||
+        lowerMessage === "portfolio" ||
+        lowerMessage === "balance") {
+        return await handleBankrCommand(message, senderId);
     }
 
     // AI conversation fallback with context
@@ -108,7 +125,7 @@ async function handleActiveQuestsRequest(senderId: string): Promise<string> {
                 category: "DEFI",
                 startTime: Date.now(),
                 endTime: Date.now() + 24 * 60 * 60 * 1000,
-                status: "ACTIVE",
+                status: QuestStatus.ACTIVE,
                 verificationLogic: "Check Swap event emission",
                 completedCount: 142
             },
@@ -126,7 +143,7 @@ async function handleActiveQuestsRequest(senderId: string): Promise<string> {
                 category: "NFT",
                 startTime: Date.now(),
                 endTime: Date.now() + 12 * 60 * 60 * 1000,
-                status: "ACTIVE",
+                status: QuestStatus.ACTIVE,
                 verificationLogic: "Check Transfer event",
                 completedCount: 89
             }
@@ -199,6 +216,39 @@ https://basescan.org/tx/0x...
 
 Total rewards claimed: 5
 Send "stats" to see your progress!`;
+}
+
+async function handleSubmitRequest(senderId: string, message: string): Promise<string> {
+    const content = message.replace(/^submit\s+/i, '').trim();
+
+    if (!content) {
+        return `❌ Nothing to submit! Please provide a link or some text after "submit".
+Example: submit https://mirror.xyz/my-post`;
+    }
+
+    // For demo, we'll use a placeholder quest
+    const questTitle = "Write about BaseQuest";
+    const questRequirement = "Write an original article explaining the benefits of OpenQuest on Base.";
+
+    try {
+        const result = await aiJudgeService.evaluateContent(content, questTitle, questRequirement);
+
+        if (result.isApproved) {
+            return `✅ SUBMISSION APPROVED! Score: ${result.score}/100
+            
+"${result.feedback}"
+
+Your quest has been verified! You can now send "claim" to get your reward. 🚀`;
+        } else {
+            return `❌ SUBMISSION REJECTED. Score: ${result.score}/100
+
+"${result.feedback}"
+
+Please improve your content and try again!`;
+        }
+    } catch (error) {
+        return `❌ Error reviewing submission: ${(error as Error).message}`;
+    }
 }
 
 async function handleLeaderboardRequest(): Promise<string> {
@@ -342,6 +392,48 @@ ${difficultyEmoji} ${quest.difficulty} | ${categoryEmoji} ${quest.category}
     return message;
 }
 
+// ============================================
+// BANKR TRADING HANDLER
+// ============================================
+
+async function handleBankrCommand(message: string, senderId: string): Promise<string> {
+    console.log(`🪙 [Bankr] Command from ${senderId}: ${message}`);
+
+    if (!isBankrAvailable()) {
+        return `❌ Bankr is not configured yet.
+
+To enable crypto trading:
+1. Visit https://bankr.bot/api
+2. Create an API key with "Agent API" access
+3. Save it to .skills/bankr/config.json
+
+Bankr enables:
+• Token trading across Base, ETH, Polygon, Solana
+• Portfolio management
+• NFT operations
+• Leverage trading & Polymarket
+• DeFi automation`;
+    }
+
+    try {
+        // Remove the "bankr" prefix if present
+        let command = message.trim();
+        if (command.toLowerCase().startsWith('bankr ')) {
+            command = command.substring(6).trim();
+        }
+
+        const response = await executeBankrCommand(command);
+        return `🪙 **Bankr Response:**
+
+${response}`;
+    } catch (error: any) {
+        console.error('[Bankr] Error:', error);
+        return `❌ Bankr command failed: ${error.message}
+
+Try "help" to see available commands.`;
+    }
+}
+
 function getHelpMessage(): string {
     return `📖 BaseQuest Commands
 
@@ -350,6 +442,7 @@ function getHelpMessage(): string {
 
 🎯 Quests
 • quests - View active quests
+• submit [link/text] - Submit content for review
 • claim - Claim quest rewards
 
 📊 Stats  
