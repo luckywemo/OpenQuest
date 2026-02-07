@@ -338,15 +338,61 @@ npx hardhat run scripts/deploy.ts --network base
 
 ---
 
-## ✅ What You Need Right Now
+---
 
-1. **Get a private key** (from MetaMask)
-2. **Get test ETH** (from faucet)
-3. **Add to .env**:
-   ```
-   DEPLOYER_PRIVATE_KEY=0x...
-   BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
-   ```
-4. **Run deployment commands** (listed above)
+## 🤖 24/7 Bot Deployment (X/Twitter & WhatsApp)
 
-Would you like me to help you deploy now?
+Since X (Twitter) polling and OpenClaw require a persistent 24/7 process, we recommend [Railway.app](https://railway.app) for a seamless "push-to-deploy" experience.
+
+### **Step 1: Connect GitHub**
+1. Create a new project on Railway.
+2. Select **"Deploy from GitHub repo"**.
+3. Choose your `OpenQuest` repository.
+
+### **Step 2: Configure Environment Variables**
+Copy all values from your local `.env` to the **Variables** tab in Railway, specifically:
+- `TWITTER_*` (All 4 keys)
+- `GEMINI_API_KEY`
+- `BANKR_API_KEY`
+- `ENABLE_TWITTER=true`
+- `ENABLE_OPENCLAW=true`
+
+### **Step 3: Set Start Command**
+Railway should auto-detect your `package.json`. Ensure the start command is:
+```bash
+npm install --legacy-peer-deps && npm run bot
+```
+
+### **Step 4: Automatic Updates**
+Every time you `git push origin main`, Railway will:
+1. Build your code.
+2. Stop the old bot.
+3. Start the new version automatically.
+
+---
+
+## ☁️ Serverless Automation (Vercel)
+
+We've already configured the following for zero-maintenance automation:
+
+### **1. Quest Generation (Crons)**
+- **File**: `api/cron/generate-quests.ts`
+- **Schedule**: Defined in `vercel.json` (Every 6 hours).
+- **Setup**: In Vercel, go to **Settings → Cron Jobs** to verify.
+
+### **2. Farcaster Interactions (Webhooks)**
+- **File**: `api/webhooks/farcaster.ts`
+- **Setup**: 
+  1. Go to [Neynar Developer Portal](https://dev.neynar.com/).
+  2. Create a Webhook pointing to `https://your-site.vercel.app/api/webhooks/farcaster`.
+  3. Select "Cast Created" and "Mentions" as triggers.
+
+---
+
+## 📚 Final CI/CD Checklist
+
+- [x] Push to `main` deploys Frontend to Vercel.
+- [x] Push to `main` builds & tests via GitHub Actions.
+- [x] Vercel Cron posts quests every 6 hours.
+- [x] Railway/Render restarts 24/7 bot on push.
+- [x] Security: Ensure `.env` is NOT in GitHub.
