@@ -15,6 +15,7 @@ import {
   Identity,
   EthBalance,
 } from '@coinbase/onchainkit/identity';
+import { NeynarAuthButton } from "@neynar/react";
 
 interface HeaderProps {
   onOpenSubmit: () => void;
@@ -61,9 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
         {/* Unified Authentication */}
         <div className="flex items-center gap-2">
           {/* Farcaster Button (Neynar Integration) */}
-          <button className="px-4 py-2 bg-[#855DCD] hover:bg-[#744ebc] text-white rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-            SIGN IN WITH FARCASTER
-          </button>
+          <NeynarAuthButton />
 
           {/* Wallet & Social (OnchainKit) */}
           <Wallet>

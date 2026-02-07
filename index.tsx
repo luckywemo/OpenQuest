@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { NeynarContextProvider, Theme } from "@neynar/react";
 import { base } from 'wagmi/chains';
 import App from './App';
 import { config } from './wagmi';
 
 import '@coinbase/onchainkit/styles.css';
+import "@neynar/react/dist/style.css";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +27,22 @@ root.render(
           apiKey={import.meta.env.VITE_CDP_API_KEY}
           chain={base}
         >
-          <App />
+          <NeynarContextProvider
+            settings={{
+              clientId: import.meta.env.VITE_NEYNAR_CLIENT_ID || "",
+              defaultTheme: Theme.Dark,
+              eventsCallbacks: {
+                onAuthSuccess: () => {
+                  console.log("Neynar Auth Success");
+                },
+                onSignout() {
+                  console.log("Neynar Signout");
+                },
+              },
+            }}
+          >
+            <App />
+          </NeynarContextProvider>
         </OnchainKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

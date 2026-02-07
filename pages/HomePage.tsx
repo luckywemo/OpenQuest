@@ -1,8 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icons } from '../constants';
+import { useAccount } from 'wagmi';
+import { useNeynarContext } from "@neynar/react";
 
 const HomePage: React.FC = () => {
+    const { isConnected } = useAccount();
+    const { user: neynarUser } = useNeynarContext();
+    const isUserAuthenticated = isConnected || !!neynarUser;
     return (
         <div className="min-h-screen flex flex-col">
             {/* Hero Section */}
@@ -34,7 +39,7 @@ const HomePage: React.FC = () => {
                             to="/profile"
                             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-300 hover-lift"
                         >
-                            Login with Farcaster
+                            {isUserAuthenticated ? 'View Profile' : 'Login with Farcaster'}
                         </Link>
                     </div>
                 </nav>
@@ -124,7 +129,7 @@ const HomePage: React.FC = () => {
                         to="/profile"
                         className="inline-block px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl font-bold text-lg transition shadow-lg"
                     >
-                        Connect Farcaster & Start
+                        {isUserAuthenticated ? 'Go to Profile' : 'Connect & Start Questing'}
                     </Link>
                 </div>
             </section>

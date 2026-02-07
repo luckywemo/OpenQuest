@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
+import { useNeynarContext } from "@neynar/react";
 
 const ProfilePage: React.FC = () => {
     const { address, isConnected } = useAccount();
+    const { user: neynarUser } = useNeynarContext();
     const { disconnect } = useDisconnect();
 
-    if (!isConnected || !address) {
+    if ((!isConnected || !address) && !neynarUser) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center max-w-md">
@@ -33,12 +35,12 @@ const ProfilePage: React.FC = () => {
         );
     }
 
-    // Authenticated view (Mocked data for now, address is real)
+    // Authenticated view (Real data from Neynar and Wagmi)
     const user = {
-        username: 'User',
-        fid: 'N/A',
-        pfp: 'https://i.pravatar.cc/150?img=3',
-        wallet: address
+        username: neynarUser?.display_name || 'User',
+        fid: neynarUser?.fid || 'N/A',
+        pfp: neynarUser?.pfp_url || 'https://i.pravatar.cc/150?img=3',
+        wallet: address || 'N/A'
     };
 
     const completedQuests = [
@@ -76,7 +78,7 @@ const ProfilePage: React.FC = () => {
                             <div className="flex gap-2 items-center flex-wrap">
                                 <span className="text-xs text-slate-500 uppercase font-mono tracking-wider text-[10px]">Your Wallet:</span>
                                 <code className="text-xs bg-slate-800/50 px-3 py-1 rounded-lg border border-white/5 text-blue-300 font-mono">
-                                    {address}
+                                    {user.wallet}
                                 </code>
                             </div>
                         </div>

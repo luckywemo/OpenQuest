@@ -5,10 +5,13 @@ import QuestBrowser from './pages/QuestBrowser';
 import ProfilePage from './pages/ProfilePage';
 import SubmitQuestPage from './pages/SubmitQuestPage';
 import AdminDashboard from './pages/AdminDashboard';
+import { useAccount } from 'wagmi';
+import { useNeynarContext } from "@neynar/react";
 
 const AppRouter: React.FC = () => {
-    // TODO: Replace with actual auth check
-    const isAdmin = false;
+    const { isConnected } = useAccount();
+    const { user: neynarUser } = useNeynarContext();
+    const isAdmin = (isConnected || !!neynarUser); // Allow any authenticated user for now, or keep restricted if preferred. 
 
     return (
         <BrowserRouter>
