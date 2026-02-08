@@ -1,11 +1,10 @@
 import React from 'react';
+import './index.css';
 import ReactDOM from 'react-dom/client';
-import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { base } from 'wagmi/chains';
+import { base } from 'viem/chains';
 import App from './App';
-import { config } from './wagmi';
 
 import '@coinbase/onchainkit/styles.css';
 import { AuthKitProvider } from '@farcaster/auth-kit';
@@ -27,17 +26,15 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <OnchainKitProvider
-          apiKey={import.meta.env.VITE_CDP_API_KEY}
-          chain={base}
-        >
-          <AuthKitProvider config={farcasterConfig}>
-            <App />
-          </AuthKitProvider>
-        </OnchainKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <QueryClientProvider client={queryClient}>
+      <OnchainKitProvider
+        apiKey={import.meta.env.VITE_CDP_API_KEY}
+        chain={base}
+      >
+        <AuthKitProvider config={farcasterConfig}>
+          <App />
+        </AuthKitProvider>
+      </OnchainKitProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

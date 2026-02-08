@@ -126,6 +126,10 @@ async function startAutoQuestGeneration() {
 
             console.log(`✅ Generated: "${quest.title}"`);
 
+            // 2. Persist to active list
+            const { addQuest } = await import('./services/questService');
+            await addQuest(quest);
+
             // Announce on Twitter
             if (config.twitter.enabled) {
                 await twitterBot.announceNewQuest(quest);

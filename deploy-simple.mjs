@@ -11,7 +11,7 @@ async function main() {
     console.log("╚══════════════════════════════════════╝\n");
 
     // Setup provider and wallet
-    const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
+    const provider = new ethers.JsonRpcProvider(process.env.BASE_SEPOLIA_RPC_URL || "https://sepolia.base.org");
     const wallet = new ethers.Wallet(process.env.DEPLOYER_PRIVATE_KEY, provider);
 
     console.log("📝 Deployment Details:");

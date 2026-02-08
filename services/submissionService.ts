@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { kv } from './redisService';
 
 export interface QuestSubmission {
     id: string;
@@ -22,7 +23,6 @@ export interface QuestSubmission {
 
 const SUBMISSIONS_FILE = path.join(process.cwd(), 'data', 'quest-submissions.json');
 
-// Ensure data directory exists
 function ensureDataDir() {
     const dataDir = path.join(process.cwd(), 'data');
     if (!fs.existsSync(dataDir)) {
@@ -30,34 +30,31 @@ function ensureDataDir() {
     }
 }
 
-// Load all submissions
-export function loadSubmissions(): QuestSubmission[] {
+function loadSubmissionsFs(): QuestSubmission[] {
     ensureDataDir();
-
-    if (!fs.existsSync(SUBMISSIONS_FILE)) {
-        return [];
-    }
-
+    if (!fs.existsSync(SUBMISSIONS_FILE)) return [];
     try {
-        const data = fs.readFileSync(SUBMISSIONS_FILE, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Error loading submissions:', error);
+        return JSON.parse(fs.readFileSync(SUBMISSIONS_FILE, 'utf-8'));
+    } catch {
         return [];
     }
 }
 
-// Save submissions
-function saveSubmissions(submissions: QuestSubmission[]) {
+function saveSubmissionsFs(subs: QuestSubmission[]) {
     ensureDataDir();
-    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
+    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(subs, null, 2));
 }
 
-// Add new submission
+export async function loadSubmissions(): Promise<QuestSubmission[]> {
+    const subs = await kv.get<QuestSubmission[]>('submissions');
+    if (subs) return subs;
+    return loadSubmissionsFs();
+}
+
 export async function addSubmission(
     submission: Omit<QuestSubmission, 'id' | 'status' | 'submittedAt'>
 ): Promise<QuestSubmission> {
-    const submissions = loadSubmissions();
+    const submissions = await loadSubmissions();
 
     const newSubmission: QuestSubmission = {
         ...submission,
@@ -67,26 +64,22 @@ export async function addSubmission(
     };
 
     submissions.push(newSubmission);
-    saveSubmissions(submissions);
+    await kv.set('submissions', submissions);
+    saveSubmissionsFs(submissions);
 
-    // TODO: Send email notification
     console.log(`📧 New quest submission from ${submission.projectName}`);
-
     return newSubmission;
 }
 
-// Update submission status
-export function updateSubmissionStatus(
+export async function updateSubmissionStatus(
     id: string,
     status: 'APPROVED' | 'REJECTED',
     reviewNotes?: string
-): QuestSubmission | null {
-    const submissions = loadSubmissions();
+): Promise<QuestSubmission | null> {
+    const submissions = await loadSubmissions();
     const index = submissions.findIndex(s => s.id === id);
 
-    if (index === -1) {
-        return null;
-    }
+    if (index === -1) return null;
 
     submissions[index].status = status;
     submissions[index].reviewedAt = Date.now();
@@ -94,16 +87,16 @@ export function updateSubmissionStatus(
         submissions[index].reviewNotes = reviewNotes;
     }
 
-    saveSubmissions(submissions);
+    await kv.set('submissions', submissions);
+    saveSubmissionsFs(submissions);
     return submissions[index];
 }
 
-// Get pending submissions
-export function getPendingSubmissions(): QuestSubmission[] {
-    return loadSubmissions().filter(s => s.status === 'PENDING');
+export async function getPendingSubmissions(): Promise<QuestSubmission[]> {
+    const subs = await loadSubmissions();
+    return subs.filter(s => s.status === 'PENDING');
 }
 
-// Get all submissions (for admin)
-export function getAllSubmissions(): QuestSubmission[] {
-    return loadSubmissions();
+export async function getAllSubmissions(): Promise<QuestSubmission[]> {
+    return await loadSubmissions();
 }

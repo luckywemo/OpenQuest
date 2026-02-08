@@ -13,7 +13,7 @@ export interface Quest {
   protocolUrl?: string;
   actionRequired: string;
   targetContract: string;
-  rewardType: 'SOULBOUND' | 'ERC20';
+  rewardType: 'SOULBOUND' | 'ERC20' | 'NATIVE';
   rewardAmount?: string;
   difficulty: 'EASY' | 'MEDIUM' | 'HARD';
   category: 'DEFI' | 'NFT' | 'SOCIAL' | 'GOVERNANCE';

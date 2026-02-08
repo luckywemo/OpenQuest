@@ -5,13 +5,11 @@ import QuestBrowser from './pages/QuestBrowser';
 import ProfilePage from './pages/ProfilePage';
 import SubmitQuestPage from './pages/SubmitQuestPage';
 import AdminDashboard from './pages/AdminDashboard';
-import { useAccount } from 'wagmi';
 import { useProfile } from "@farcaster/auth-kit";
 
 const AppRouter: React.FC = () => {
-    const { isConnected } = useAccount();
-    const { isAuthenticated, profile } = useProfile();
-    const isAdmin = (isConnected || isAuthenticated); // Allow any authenticated user for now, or keep restricted if preferred. 
+    const { isAuthenticated } = useProfile();
+    const isAdmin = isAuthenticated; // Allow any authenticated user for now, or keep restricted if preferred. 
 
     return (
         <BrowserRouter>

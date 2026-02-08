@@ -1,13 +1,12 @@
-/**
- * OpenClaw Agent Handler for BaseQuest
- * Connects OpenClaw messaging platforms to Gemini AI and BaseQuest smart contract
- */
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { GoogleGenAI } from "@google/genai";
 import { ethers } from "ethers";
 import { Quest, QuestStatus } from "../types";
 import aiJudgeService from "./aiJudgeService";
 import { executeBankrCommand, getBankrHelp, isBankrAvailable } from "./bankrService";
+import { OPENQUEST_ABI, OPENQUEST_ADDRESS } from "../constants/contractConstants";
 
 // Initialize Gemini AI lazily
 let aiInstance: GoogleGenAI | null = null;
@@ -17,6 +16,14 @@ function getAi() {
     }
     return aiInstance;
 }
+
+// Initialize Provider and Signer
+const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL || "https://mainnet.base.org");
+const privateKey = process.env.DEPLOYER_PRIVATE_KEY!.startsWith('0x')
+    ? process.env.DEPLOYER_PRIVATE_KEY!
+    : `0x${process.env.DEPLOYER_PRIVATE_KEY!}`;
+const signer = new ethers.Wallet(privateKey, provider);
+const openQuestContract = new ethers.Contract(OPENQUEST_ADDRESS, OPENQUEST_ABI, signer);
 
 // Storage for user wallet addresses (use Redis/DB in production)
 const userWallets = new Map<string, string>();
@@ -114,50 +121,44 @@ Send "quests" to see active quests!`;
 
 async function handleActiveQuestsRequest(senderId: string): Promise<string> {
     try {
-        // In a real implementation, fetch from smart contract
-        // For now, we'll use mock data that matches our Quest type
-        const mockQuests: Quest[] = [
-            {
-                id: "q-demo1",
-                title: "Swap on Uniswap Base",
-                description: "Complete your first swap on Uniswap's Base deployment",
-                protocol: "Uniswap",
-                protocolUrl: "https://app.uniswap.org",
-                actionRequired: "Swap any amount of tokens",
-                targetContract: "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
-                rewardType: "ERC20",
-                rewardAmount: "25 QUEST",
-                difficulty: "EASY",
-                category: "DEFI",
-                startTime: Date.now(),
-                endTime: Date.now() + 24 * 60 * 60 * 1000,
-                status: QuestStatus.ACTIVE,
-                verificationLogic: "Check Swap event emission",
-                completedCount: 142
-            },
-            {
-                id: "q-demo2",
-                title: "Mint BasePaint NFT",
-                description: "Express creativity on BasePaint collaborative canvas",
-                protocol: "BasePaint",
-                protocolUrl: "https://basepaint.xyz",
-                actionRequired: "Mint a BasePaint NFT",
-                targetContract: "0xBa5e05cb26b78eDa3A2f8e3b3814726305dcAc83",
-                rewardType: "SOULBOUND",
-                rewardAmount: "Creator Badge",
-                difficulty: "EASY",
-                category: "NFT",
-                startTime: Date.now(),
-                endTime: Date.now() + 12 * 60 * 60 * 1000,
-                status: QuestStatus.ACTIVE,
-                verificationLogic: "Check Transfer event",
-                completedCount: 89
-            }
-        ];
+        const stats = await openQuestContract.getContractStats();
+        const totalQuests = Number(stats.totalQuests);
 
-        return formatQuestsMessage(mockQuests, senderId);
+        const activeQuests: Quest[] = [];
+
+        // Fetch last 5 quests for the demo/active list
+        for (let i = Math.max(1, totalQuests - 4); i <= totalQuests; i++) {
+            const q = await openQuestContract.quests(i);
+            if (q.active) {
+                activeQuests.push({
+                    id: q.id.toString(),
+                    title: q.title,
+                    description: q.description,
+                    protocol: q.protocol,
+                    protocolUrl: "", // Contract doesn't store this, could map it
+                    actionRequired: q.description,
+                    targetContract: q.targetContract,
+                    rewardType: ["SOULBOUND", "ERC20", "NATIVE"][q.rewardType] as any,
+                    rewardAmount: q.rewardType === 2 ? ethers.formatEther(q.rewardAmount) + " ETH" : q.rewardAmount.toString(),
+                    difficulty: ["EASY", "MEDIUM", "HARD"][q.difficulty] as any,
+                    category: ["DEFI", "NFT", "SOCIAL", "GOVERNANCE"][q.category] as any,
+                    startTime: Number(q.startTime) * 1000,
+                    endTime: Number(q.endTime) * 1000,
+                    status: QuestStatus.ACTIVE,
+                    verificationLogic: "Onchain Verification",
+                    completedCount: Number(q.completionCount)
+                });
+            }
+        }
+
+        if (activeQuests.length === 0) {
+            return `🎯 No active quests found on the contract right now. Check back soon!`;
+        }
+
+        return formatQuestsMessage(activeQuests, senderId);
     } catch (error) {
-        return `❌ Error fetching quests: ${(error as Error).message}`;
+        console.error("Error fetching quests from contract:", error);
+        return `❌ Error fetching live quests: ${(error as Error).message}`;
     }
 }
 
@@ -165,35 +166,27 @@ async function handleStatsRequest(senderId: string): Promise<string> {
     const userAddress = userWallets.get(senderId);
 
     if (!userAddress) {
-        return `❌ Wallet not linked!
-
-Send "link 0xYourAddress" first to track your stats.`;
+        return `❌ Wallet not linked! Send "link 0xYourAddress" first to track your stats.`;
     }
 
     try {
-        // In production, fetch from smart contract
-        // Mock stats for demo
-        const mockStats = {
-            totalCompleted: 5,
-            totalRewardsClaimed: 4,
-            currentStreak: 3,
-            badgeTokenIds: [1, 2, 3, 4]
-        };
+        const stats = await openQuestContract.getUserStats(userAddress);
 
-        return `📊 Your BaseQuest Stats
+        return `📊 Your BaseQuest Stats (Onchain)
 
 Wallet: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}
 
-✅ Quests Completed: ${mockStats.totalCompleted}
-🎁 Rewards Claimed: ${mockStats.totalRewardsClaimed}
-🔥 Current Streak: ${mockStats.currentStreak} days
-🏅 Badges Earned: ${mockStats.badgeTokenIds.length}
+✅ Quests Completed: ${stats.totalCompleted.toString()}
+🎁 Rewards Claimed: ${stats.totalRewardsClaimed.toString()}
+🔥 Current Streak: ${stats.currentStreak.toString()} completions
+🏅 Badges Earned: ${stats.badgeTokenIds.length}
 
 Keep crushing it! 💪
 
 Send "quests" to see what's active!`;
     } catch (error) {
-        return `❌ Error fetching stats: ${(error as Error).message}`;
+        console.error("Stats error:", error);
+        return `❌ Error fetching onchain stats: ${(error as Error).message}`;
     }
 }
 
@@ -201,50 +194,72 @@ async function handleClaimRequest(senderId: string, message: string): Promise<st
     const userAddress = userWallets.get(senderId);
 
     if (!userAddress) {
-        return `❌ Wallet not linked!
-
-Send "link 0xYourAddress" first.`;
+        return `❌ Wallet not linked! Send "link 0xYourAddress" first.`;
     }
 
-    // Extract quest ID if provided (e.g., "claim q-demo1")
-    const questIdMatch = message.match(/claim\s+(q-[\w]+)/i);
+    // Extract quest ID if provided (e.g., "claim 1")
+    const questIdMatch = message.match(/claim\s+(\d+)/i);
+    const questId = questIdMatch ? questIdMatch[1] : null;
 
-    return `🎉 Reward Claimed!
+    if (!questId) {
+        return `❌ Please specify the quest ID to claim.\nExample: claim 1`;
+    }
 
-Quest: Swap on Uniswap Base
-Reward: 25 QUEST tokens
+    try {
+        // We can't claim FOR the user easily via messaging (requires their signature)
+        // For the demo, the Agent can "push" the claim if authorized, 
+        // or provide a link to the web dashboard.
 
-Transaction submitted!
-TX: 0x${Math.random().toString(16).substr(2, 64)}
+        return `🎁 To claim your reward for Quest #${questId}, please visit the BaseQuest dashboard:
+        
+https://overriding-carie-prepotently.ngrok-free.dev/profile
 
-View on BaseScan:
-https://basescan.org/tx/0x...
-
-Total rewards claimed: 5
-Send "stats" to see your progress!`;
+(Transaction signing requires your connected wallet)`;
+    } catch (error) {
+        return `❌ Error processing claim: ${(error as Error).message}`;
+    }
 }
 
 async function handleSubmitRequest(senderId: string, message: string): Promise<string> {
     const content = message.replace(/^submit\s+/i, '').trim();
+    const userAddress = userWallets.get(senderId);
 
-    if (!content) {
-        return `❌ Nothing to submit! Please provide a link or some text after "submit".
-Example: submit https://mirror.xyz/my-post`;
+    if (!userAddress) {
+        return `❌ Wallet not linked! Send "link 0xYourAddress" first so I can record your completion.`;
     }
 
-    // For demo, we'll use a placeholder quest
-    const questTitle = "Write about BaseQuest";
-    const questRequirement = "Write an original article explaining the benefits of OpenQuest on Base.";
+    if (!content) {
+        return `❌ Nothing to submit! Please provide a link or text.\nExample: submit https://mirror.xyz/...`;
+    }
 
     try {
-        const result = await aiJudgeService.evaluateContent(content, questTitle, questRequirement);
+        // For demo, we'll evaluate for the most recent quest
+        const stats = await openQuestContract.getContractStats();
+        const questId = Number(stats.totalQuests);
+        const quest = await openQuestContract.quests(questId);
+
+        const result = await aiJudgeService.evaluateContent(content, quest.title, quest.description);
 
         if (result.isApproved) {
+            console.log(`✅ Approved submission from ${userAddress}. Recording onchain...`);
+
+            // Record completion onchain (Agent is authorized)
+            const tx = await openQuestContract.recordCompletion(
+                questId,
+                userAddress,
+                ethers.id(content) // Use content hash as proof
+            );
+
+            await tx.wait();
+
             return `✅ SUBMISSION APPROVED! Score: ${result.score}/100
             
 "${result.feedback}"
 
-Your quest has been verified! You can now send "claim" to get your reward. 🚀`;
+🚀 Your completion has been recorded on the Base blockchain!
+TX: ${tx.hash}
+
+You can now visit the dashboard to claim your reward.`;
         } else {
             return `❌ SUBMISSION REJECTED. Score: ${result.score}/100
 
@@ -253,6 +268,7 @@ Your quest has been verified! You can now send "claim" to get your reward. 🚀`
 Please improve your content and try again!`;
         }
     } catch (error) {
+        console.error("Submission error:", error);
         return `❌ Error reviewing submission: ${(error as Error).message}`;
     }
 }

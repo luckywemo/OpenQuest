@@ -21,6 +21,10 @@ export default async function handler(req: any, res: any) {
         const quest = await generateNewQuest([]);
         console.log(`✅ Generated: "${quest.title}"`);
 
+        // 2. Persist to active list
+        const { addQuest } = await import('../../services/questService');
+        await addQuest(quest);
+
         const results = {
             twitter: false,
             farcaster: false,

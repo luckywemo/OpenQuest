@@ -5,9 +5,8 @@ import { useAccount } from 'wagmi';
 import { useProfile } from "@farcaster/auth-kit";
 
 const HomePage: React.FC = () => {
-    const { isConnected } = useAccount();
     const { isAuthenticated } = useProfile();
-    const isUserAuthenticated = isConnected || isAuthenticated;
+    const isUserAuthenticated = isAuthenticated;
     return (
         <div className="min-h-screen flex flex-col">
             {/* Hero Section */}
@@ -39,7 +38,7 @@ const HomePage: React.FC = () => {
                             to="/profile"
                             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-300 hover-lift"
                         >
-                            {isUserAuthenticated ? 'View Profile' : 'Login with Farcaster'}
+                            {isUserAuthenticated ? 'View Profile' : 'Get Started'}
                         </Link>
                     </div>
                 </nav>
@@ -129,7 +128,7 @@ const HomePage: React.FC = () => {
                         to="/profile"
                         className="inline-block px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl font-bold text-lg transition shadow-lg"
                     >
-                        {isUserAuthenticated ? 'Go to Profile' : 'Connect & Start Questing'}
+                        {isUserAuthenticated ? 'Go to Profile' : 'Get Started'}
                     </Link>
                 </div>
             </section>
