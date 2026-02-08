@@ -1,15 +1,7 @@
 import React from 'react';
-import { useAccount } from 'wagmi';
 import { useProfile } from "@farcaster/auth-kit";
 import { Icons } from '../constants';
 import { Twitter, MessageSquare, PlusCircle, X, ChevronRight } from 'lucide-react';
-import {
-  Address,
-  Avatar,
-  Name,
-  Identity,
-  EthBalance,
-} from '@coinbase/onchainkit/identity';
 import { SignInButton } from "@farcaster/auth-kit";
 import { Link } from 'react-router-dom';
 
@@ -18,12 +10,11 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
-  const { isConnected } = useAccount();
   const { isAuthenticated, profile } = useProfile();
   const [isXModalOpen, setIsXModalOpen] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const isUserAuthenticated = isConnected || isAuthenticated;
+  const isUserAuthenticated = isAuthenticated;
 
   return (
     <header className="py-6 relative z-50">

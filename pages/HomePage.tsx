@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icons } from '../constants';
-import { useAccount } from 'wagmi';
 import { useProfile } from "@farcaster/auth-kit";
 
 const HomePage: React.FC = () => {

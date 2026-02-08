@@ -3,7 +3,8 @@
  * Auto-detects and responds to partnership/sponsorship requests
  */
 
-import { v2Client } from './twitterBot.js';
+import twitterBot from './twitterBot.js';
+const { v2Client } = twitterBot as any;
 
 // Partnership detection keywords
 const PARTNERSHIP_KEYWORDS = [

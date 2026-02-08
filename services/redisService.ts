@@ -19,7 +19,7 @@ export const kv = {
         if (!redis) return null;
         return await redis.get<T>(key);
     },
-    async set(key: string, value: any, opts?: { ex?: number }) {
+    async set(key: string, value: any, opts?: any) {
         if (!redis) return;
         await redis.set(key, value, opts);
     },

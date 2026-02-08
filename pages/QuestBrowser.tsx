@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Quest } from '../types';
 import { Link } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { useProfile } from "@farcaster/auth-kit";
 import Header from '../components/Header';
 
@@ -68,7 +67,7 @@ const QuestBrowser: React.FC = () => {
                             <div key={quest.id} className="glass p-6 md:p-8 rounded-3xl border border-white/5 hover:border-blue-500/30 transition-all group flex flex-col justify-between h-full hover-lift">
                                 <div>
                                     <div className="flex justify-between items-start mb-6">
-                                        <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${getDifficultyColor(quest.difficulty)}`}>
+                                        <span className={`px - 3 py - 1 rounded - full text - [9px] font - black uppercase tracking - widest border ${getDifficultyColor(quest.difficulty)} `}>
                                             {quest.difficulty}
                                         </span>
                                         <span className="text-[10px] font-mono text-slate-600 uppercase tracking-tighter">[{quest.category}]</span>
@@ -111,7 +110,7 @@ const QuestBrowser: React.FC = () => {
                             <div className="flex flex-col md:flex-row gap-8">
                                 <div className="flex-1">
                                     <div className="flex gap-3 mb-4">
-                                        <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${getDifficultyColor(selectedQuest.difficulty)}`}>
+                                        <span className={`px - 3 py - 1 rounded - full text - [9px] font - black uppercase tracking - widest border ${getDifficultyColor(selectedQuest.difficulty)} `}>
                                             {selectedQuest.difficulty}
                                         </span>
                                         <span className="text-[10px] font-mono text-slate-500 uppercase flex items-center">{selectedQuest.protocol} / {selectedQuest.category}</span>
