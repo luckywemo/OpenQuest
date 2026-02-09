@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "bot": "tsx bot.ts",
-    "bot:build": "tsc bot.ts --outDir dist --module commonjs --moduleResolution node --esModuleInterop --resolveJsonModule --skipLibCheck --target es6",
+    "bot:build": "tsc bot.ts --outDir dist --module ESNext --moduleResolution node --esModuleInterop --resolveJsonModule --skipLibCheck --target ESNext",
     "bot:start": "node dist/bot.js"
   },
   "dependencies": {
