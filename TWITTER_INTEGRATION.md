@@ -1,8 +1,8 @@
-# Twitter/X Integration for BaseQuest
+# Twitter/X Integration for OpenQuest
 
 ## 🐦 Overview
 
-BaseQuest now supports Twitter/X alongside OpenClaw (WhatsApp/Telegram/Discord)! This gives you the best of both worlds:
+OpenQuest now supports Twitter/X alongside OpenClaw (WhatsApp/Telegram/Discord)! This gives you the best of both worlds:
 - **Twitter**: Public engagement, viral growth, crypto community
 - **OpenClaw**: Private messaging, direct support, chat platforms
 
@@ -74,20 +74,20 @@ OpenQuestBot: @user 🎯 Active Quests:
    Reward: Creator Badge | ⏰ 11h left
 
 DM me "link 0xYourAddress" to start!
-More: basequest.app
+More: openquest.app
 ```
 
 ```
 User: @OpenQuestBot how do quests work?
 
-OpenQuestBot: @user 📖 How BaseQuest Works:
+OpenQuestBot: @user 📖 How OpenQuest Works:
 
 1️⃣ DM me: "link 0xYourAddress"
 2️⃣ Complete onchain actions (swap, mint, etc)
 3️⃣ I auto-detect within 30 seconds! ⚡
 4️⃣ Reply "claim" to get rewards
 
-Start: basequest.app
+Start: openquest.app
 ```
 
 ```
@@ -138,7 +138,7 @@ Swap on Uniswap Base
 
 Reply "how" to learn more! 👇
 
-#Base #BaseQuest #Onchain
+#Base #OpenQuest #Onchain
 ```
 
 When someone completes a quest:
@@ -153,7 +153,7 @@ OpenQuestBot: 🎉 QUEST COMPLETED!
 
 Reply "claim" to get your reward!
 
-#BaseQuest #Base
+#OpenQuest #Base
 ```
 
 ---
@@ -358,7 +358,7 @@ const influencers = ['vitalik.eth', 'coinbase', 'base'];
 
 ### 2. **Use Trending Hashtags**
 ```typescript
-const hashtags = ['#Base', '#Onchain', '#DeFi', '#BaseQuest'];
+const hashtags = ['#Base', '#Onchain', '#DeFi', '#OpenQuest'];
 ```
 
 ### 3. **Tweet Regularly**
@@ -377,7 +377,7 @@ First 100 to complete get 2x rewards!
 
 Follow @OpenQuestBot and reply "in" to join
 
-#BaseQuest
+#OpenQuest
 `);
 ```
 
@@ -419,7 +419,7 @@ Follow @OpenQuestBot and reply "in" to join
 
 - **Twitter API Docs**: https://developer.twitter.com/en/docs
 - **twitter-api-v2 Library**: https://github.com/PLhery/node-twitter-api-v2
-- **BaseQuest Contract**: `contracts/BaseQuest.sol`
+- **OpenQuest Contract**: `contracts/OpenQuest.sol`
 - **OpenClaw Docs**: https://docs.openclaw.ai
 
 ---

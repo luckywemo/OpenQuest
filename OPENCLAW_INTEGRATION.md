@@ -1,4 +1,4 @@
-# OpenClaw Integration for BaseQuest
+# OpenClaw Integration for OpenQuest
 
 ## 🦞 What is OpenClaw?
 
@@ -8,7 +8,7 @@ OpenClaw is a multi-platform messaging gateway that connects AI agents to:
 - 🎮 Discord
 - 💬 iMessage (macOS)
 
-This allows users to interact with BaseQuest through their preferred messaging app!
+This allows users to interact with OpenQuest through their preferred messaging app!
 
 ---
 
@@ -63,9 +63,9 @@ openclaw channels login
 ### **WhatsApp Example**
 
 ```
-User: Hi BaseQuest!
+User: Hi OpenQuest!
 
-BaseQuest: 👋 Welcome to BaseQuest!
+OpenQuest: 👋 Welcome to OpenQuest!
 
 I help you discover and complete onchain quests on Base blockchain.
 
@@ -79,7 +79,7 @@ Send "quests"
 
 User: quests
 
-BaseQuest: 🎯 Active Quests on Base (2)
+OpenQuest: 🎯 Active Quests on Base (2)
 
 1. Swap on Uniswap Base
 
@@ -104,7 +104,7 @@ Send "link 0xYourAddress"
 
 User: link 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 
-BaseQuest: ✅ Wallet linked successfully!
+OpenQuest: ✅ Wallet linked successfully!
 
 Address: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 
@@ -120,7 +120,7 @@ Send "quests" to see active quests!
 
 [User completes Uniswap swap]
 
-BaseQuest: 🎉 Quest Completed!
+OpenQuest: 🎉 Quest Completed!
 
 I detected your swap on Uniswap Base!
 
@@ -133,7 +133,7 @@ Send "claim" to receive your reward
 
 User: claim
 
-BaseQuest: 🎉 Reward Claimed!
+OpenQuest: 🎉 Reward Claimed!
 
 Quest: Swap on Uniswap Base
 Reward: 25 QUEST tokens
@@ -160,14 +160,14 @@ Send "stats" to see your progress!
 | `claim` | Claim rewards for completed quests |
 | `leaderboard` | View top quest completers |
 | `help` | Show all available commands |
-| Chat naturally | Ask BaseQuest anything! |
+| Chat naturally | Ask OpenQuest anything! |
 
 ---
 
 ## 🛠️ Configuration
 
 ### OpenClaw Config Location
-`c:\Users\H\Desktop\app\BaseQuest\.openclaw\config.json`
+`c:\Users\H\Desktop\app\OpenQuest\.openclaw\config.json`
 
 ### Key Settings
 
@@ -179,14 +179,14 @@ Send "stats" to see your progress!
       "allowFrom": ["*"],  // Or specific numbers: ["+1234567890"]
       "groups": {
         "*": {
-          "requireMention": true  // Requires @basequest in groups
+          "requireMention": true  // Requires @openquest in groups
         }
       }
     }
   },
   "messages": {
     "groupChat": {
-      "mentionPatterns": ["@basequest", "@quest"]
+      "mentionPatterns": ["@openquest", "@quest"]
     }
   },
   "gateway": {
@@ -246,7 +246,7 @@ Send "stats" to see your progress!
                  │
                  ▼
 ┌─────────────────────────────────────┐
-│  BaseQuest Agent Handler            │
+│  OpenQuest Agent Handler            │
 │  (services/openclawAgent.ts)        │
 └────────────────┬────────────────────┘
                  │
@@ -268,8 +268,8 @@ Send "stats" to see your progress!
 # Terminal 1: Start OpenClaw Gateway
 openclaw gateway --port 18789
 
-# Terminal 2: Start BaseQuest Frontend
-cd c:\Users\H\Desktop\app\BaseQuest
+# Terminal 2: Start OpenQuest Frontend
+cd c:\Users\H\Desktop\app\OpenQuest
 npm run dev
 
 # Terminal 3: Monitor OpenClaw logs
@@ -392,7 +392,7 @@ Edit `.openclaw/config.json`:
 ```json
 {
   "agent": {
-    "systemPrompt": "You are BaseQuest, the friendliest quest agent on Base! Help users earn rewards through DeFi, NFT, and social quests. Be enthusiastic and use emojis! 🚀"
+    "systemPrompt": "You are OpenQuest, the friendliest quest agent on Base! Help users earn rewards through DeFi, NFT, and social quests. Be enthusiastic and use emojis! 🚀"
   }
 }
 ```
@@ -404,7 +404,7 @@ Edit `.openclaw/config.json`:
   "messages": {
     "groupChat": {
       "mentionPatterns": [
-        "@basequest",
+        "@openquest",
         "hey quest",
         "quest bot"
       ]
@@ -419,7 +419,7 @@ Edit `.openclaw/config.json`:
 
 - **OpenClaw Docs**: https://docs.openclaw.ai
 - **GitHub**: https://github.com/openclaw/openclaw
-- **BaseQuest Docs**: [Coming soon]
+- **OpenQuest Docs**: [Coming soon]
 
 ---
 
@@ -435,11 +435,11 @@ Edit `.openclaw/config.json`:
 
 ## 💡 Tips
 
-- **Group Chats**: Mention `@basequest` to trigger the bot
+- **Group Chats**: Mention `@openquest` to trigger the bot
 - **Private DMs**: No mention needed, just chat naturally
 - **Multiple Users**: Each user links their own wallet
 - **Multi-Platform**: Same account works across WhatsApp/Telegram/Discord
 
 ---
 
-Need help? Send "help" to BaseQuest on any platform!
+Need help? Send "help" to OpenQuest on any platform!

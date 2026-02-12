@@ -27,7 +27,7 @@
 
 ```bash
 # Navigate to project
-cd c:\Users\H\Desktop\app\BaseQuest
+cd c:\Users\H\Desktop\app\OpenQuest
 
 # Install Hardhat
 npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
@@ -124,7 +124,7 @@ BASE_RPC_URL=https://mainnet.base.org
 BASESCAN_API_KEY=your_basescan_key
 
 # Deployed contract address (fill in after deployment)
-BASEQUEST_CONTRACT_ADDRESS=
+OPENQUEST_CONTRACT_ADDRESS=
 ```
 
 ### **Step 4: Get Private Key**
@@ -158,7 +158,7 @@ Create `scripts/deploy.ts`:
 import { ethers } from "hardhat";
 
 async function main() {
-  console.log("🚀 Deploying BaseQuest contract...");
+  console.log("🚀 Deploying OpenQuest contract...");
 
   // Get deployer account
   const [deployer] = await ethers.getSigners();
@@ -166,16 +166,16 @@ async function main() {
   console.log("Account balance:", (await ethers.provider.getBalance(deployer.address)).toString());
 
   // Deploy the contract
-  const BaseQuest = await ethers.getContractFactory("BaseQuest");
-  const baseQuest = await BaseQuest.deploy();
+  const OpenQuest = await ethers.getContractFactory("OpenQuest");
+  const openQuest = await OpenQuest.deploy();
   
-  await baseQuest.waitForDeployment();
-  const address = await baseQuest.getAddress();
+  await openQuest.waitForDeployment();
+  const address = await openQuest.getAddress();
 
-  console.log("✅ BaseQuest deployed to:", address);
+  console.log("✅ OpenQuest deployed to:", address);
   console.log("");
   console.log("📝 Save this address to your .env file:");
-  console.log(`BASEQUEST_CONTRACT_ADDRESS=${address}`);
+  console.log(`OPENQUEST_CONTRACT_ADDRESS=${address}`);
   console.log("");
   console.log("🔍 Verify contract:");
   console.log(`npx hardhat verify --network baseSepolia ${address}`);
@@ -197,8 +197,8 @@ Move contract to Hardhat structure:
 # Create contracts directory if needed
 mkdir contracts
 
-# Copy BaseQuest.sol
-copy contracts\BaseQuest.sol contracts\BaseQuest.sol
+# Copy OpenQuest.sol
+copy contracts\OpenQuest.sol contracts\OpenQuest.sol
 ```
 
 ### **Step 8: Deploy to Testnet**
@@ -213,13 +213,13 @@ npx hardhat run scripts/deploy.ts --network baseSepolia
 
 **Expected output:**
 ```
-🚀 Deploying BaseQuest contract...
+🚀 Deploying OpenQuest contract...
 Deploying with account: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
 Account balance: 1000000000000000000
-✅ BaseQuest deployed to: 0xABCDEF1234567890...
+✅ OpenQuest deployed to: 0xABCDEF1234567890...
 
 📝 Save this address to your .env file:
-BASEQUEST_CONTRACT_ADDRESS=0xABCDEF1234567890...
+OPENQUEST_CONTRACT_ADDRESS=0xABCDEF1234567890...
 ```
 
 ### **Step 9: Verify Contract**
@@ -237,10 +237,10 @@ Create `scripts/test-contract.ts`:
 import { ethers } from "hardhat";
 
 async function main() {
-  const contractAddress = process.env.BASEQUEST_CONTRACT_ADDRESS!;
+  const contractAddress = process.env.OPENQUEST_CONTRACT_ADDRESS!;
   
-  const BaseQuest = await ethers.getContractFactory("BaseQuest");
-  const contract = BaseQuest.attach(contractAddress);
+  const OpenQuest = await ethers.getContractFactory("OpenQuest");
+  const contract = OpenQuest.attach(contractAddress);
 
   console.log("📝 Creating test quest...");
   

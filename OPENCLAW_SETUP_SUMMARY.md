@@ -20,7 +20,7 @@ Pre-configured for:
 - WhatsApp integration (enabled by default)
 - Telegram support (disabled, add token to enable)
 - Discord support (disabled, add token to enable)
-- Mention patterns in groups (@basequest, @quest)
+- Mention patterns in groups (@openquest, @quest)
 - Gemini AI system prompt
 
 ### 3. **Documentation**
@@ -73,7 +73,7 @@ openclaw channels login
 
 ## 💬 User Commands
 
-Once set up, users can message BaseQuest on WhatsApp/Telegram/Discord:
+Once set up, users can message OpenQuest on WhatsApp/Telegram/Discord:
 
 | Command | Response |
 |---------|----------|
@@ -93,7 +93,7 @@ Once set up, users can message BaseQuest on WhatsApp/Telegram/Discord:
 User WhatsApp Message:
 "Hey, what quests are available?"
 
-BaseQuest Response:
+OpenQuest Response:
 🎯 Active Quests on Base (2)
 
 1. Swap on Uniswap Base
@@ -162,7 +162,7 @@ Edit `.openclaw/config.json`:
 ```json
 {
   "agent": {
-    "systemPrompt": "You are BaseQuest, a super enthusiastic quest guide! Use lots of emojis and get users excited about onchain adventures! 🚀🎯"
+    "systemPrompt": "You are OpenQuest, a super enthusiastic quest guide! Use lots of emojis and get users excited about onchain adventures! 🚀🎯"
   }
 }
 ```
@@ -190,13 +190,13 @@ Edit `.openclaw/config.json`:
 1. **Wallet Links**: Stored in-memory (use Redis/DB in production)
 2. **Gateway Token**: Required for non-loopback binds
 3. **Whitelist**: Configure `allowFrom` to restrict access
-4. **Mentions**: Groups require @basequest mention by default
+4. **Mentions**: Groups require @openquest mention by default
 
 ---
 
 ## 📱 What Users See
 
-BaseQuest becomes accessible from:
+OpenQuest becomes accessible from:
 - ✅ WhatsApp (scan QR to link)
 - ✅ Telegram (add bot)
 - ✅ Discord (invite bot to server)
@@ -211,7 +211,7 @@ BaseQuest becomes accessible from:
 | Without OpenClaw | With OpenClaw |
 |-----------------|---------------|
 | Website only | WhatsApp, Telegram, Discord, iMessage |
-| Must visit basequest.app | Chat from anywhere |
+| Must visit openquest.app | Chat from anywhere |
 | Browser required | Mobile-first |
 | Limited reach | Billions of users |
 | Complex onboarding | "Just message us!" |
@@ -250,7 +250,7 @@ openclaw channels login
 
 - **OpenClaw Docs**: https://docs.openclaw.ai
 - **GitHub**: https://github.com/openclaw/openclaw
-- **BaseQuest Contract**: `contracts/BaseQuest.sol`
+- **OpenQuest Contract**: `contracts/OpenQuest.sol`
 - **Integration Guide**: `OPENCLAW_INTEGRATION.md`
 
 ---
@@ -276,4 +276,4 @@ openclaw channels login
 
 Then scan the QR code with your WhatsApp mobile app!
 
-Users can then chat with BaseQuest directly on WhatsApp 🚀
+Users can then chat with OpenQuest directly on WhatsApp 🚀

@@ -1,5 +1,5 @@
 /**
- * Twitter/X Bot Integration for BaseQuest
+ * Twitter/X Bot Integration for OpenQuest
  * Handles mentions, DMs, quest announcements, and reward celebrations
  */
 
@@ -193,7 +193,7 @@ async function handleQuestsCommand(tweetId: string, userId: string, username: st
 
 DM me "link 0xYourAddress" to start!
 
-More: basequest.app`;
+More: openquest.app`;
 
     await v2Client.reply(response, tweetId);
 }
@@ -223,14 +223,14 @@ Keep crushing it! 💪`;
 }
 
 async function handleHowCommand(tweetId: string, userId: string, username: string) {
-    const response = `@${username} 📖 How BaseQuest Works:
+    const response = `@${username} 📖 How OpenQuest Works:
 
 1️⃣ DM me: "link 0xYourAddress"
 2️⃣ Complete onchain actions (swap, mint, etc)
 3️⃣ I auto-detect within 30 seconds! ⚡
 4️⃣ Reply "claim" to get rewards
 
-Start: basequest.app`;
+Start: openquest.app`;
 
     await v2Client.reply(response, tweetId);
 }
@@ -270,14 +270,14 @@ async function handleLeaderboardCommand(tweetId: string) {
 4. @degentrader - 67 quests
 5. @nftcollector - 59 quests
 
-Full leaderboard: basequest.app/leaderboard`;
+Full leaderboard: openquest.app/leaderboard`;
 
     await v2Client.reply(response, tweetId);
 }
 
 async function handleAIResponse(tweetId: string, userId: string, username: string, text: string) {
     try {
-        const prompt = `You are BaseQuest, an autonomous quest agent on Base blockchain.
+        const prompt = `You are OpenQuest, an autonomous quest agent on Base blockchain.
 
 User @${username} mentioned: "${text}"
 
@@ -440,7 +440,7 @@ Join via WhatsApp & start earning!
 export async function tweetDailyStats() {
     try {
         // Mock stats (in production, fetch from contract)
-        const tweet = `📊 BaseQuest Daily Stats
+        const tweet = `📊 OpenQuest Daily Stats
 
 🎯 Quests Completed: 247
 👥 Active Users: 89
@@ -449,7 +449,7 @@ export async function tweetDailyStats() {
 
 Keep building onchain! 🚀
 
-#Base #BaseQuest`;
+#Base #OpenQuest`;
 
         await v2Client.tweet(tweet);
         console.log('📈 Daily stats tweeted');

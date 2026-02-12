@@ -1,8 +1,8 @@
-# BaseQuest Smart Contract
+# OpenQuest Smart Contract
 
 ## Overview
 
-**BaseQuest.sol** is a unified smart contract that handles all quest functionality:
+**OpenQuest.sol** is a unified smart contract that handles all quest functionality:
 - ✅ Quest creation and management
 - ✅ Completion tracking and verification
 - ✅ Reward distribution (Soulbound NFTs, ERC20, ETH)
@@ -75,14 +75,14 @@ npm install --save-dev hardhat @openzeppelin/contracts
 ```javascript
 // scripts/deploy.js
 async function main() {
-    const BaseQuest = await ethers.getContractFactory("BaseQuest");
-    const baseQuest = await BaseQuest.deploy();
-    await baseQuest.waitForDeployment();
+    const OpenQuest = await ethers.getContractFactory("OpenQuest");
+    const openQuest = await OpenQuest.deploy();
+    await openQuest.waitForDeployment();
     
-    console.log("BaseQuest deployed to:", await baseQuest.getAddress());
+    console.log("OpenQuest deployed to:", await openQuest.getAddress());
     
     // Fund contract with initial ETH for rewards
-    await baseQuest.fundContract({ value: ethers.parseEther("1.0") });
+    await openQuest.fundContract({ value: ethers.parseEther("1.0") });
 }
 
 main();
@@ -103,7 +103,7 @@ npx hardhat run scripts/deploy.js --network base
 ### Creating a Quest (Agent)
 
 ```javascript
-const tx = await baseQuest.createQuest(
+const tx = await openQuest.createQuest(
     "Swap on Uniswap Base",                    // title
     "Complete your first swap on Uniswap",     // description
     "Uniswap",                                  // protocol
@@ -125,7 +125,7 @@ const tx = await baseQuest.createQuest(
 const userAddress = "0x...";
 const txHash = "0x...";
 
-await baseQuest.recordCompletion(
+await openQuest.recordCompletion(
     questId,
     userAddress,
     txHash  // Proof of completion
@@ -136,13 +136,13 @@ await baseQuest.recordCompletion(
 
 ```javascript
 // User claims their soulbound badge
-await baseQuest.claimReward(questId);
+await openQuest.claimReward(questId);
 ```
 
 ### Querying User Stats
 
 ```javascript
-const stats = await baseQuest.getUserStats(userAddress);
+const stats = await openQuest.getUserStats(userAddress);
 console.log("Total Completed:", stats.totalCompleted);
 console.log("Current Streak:", stats.currentStreak);
 console.log("Badges:", stats.badgeTokenIds);
@@ -154,7 +154,7 @@ The contract uses an agent authorization system:
 
 ```javascript
 // Owner authorizes AI agent wallet
-await baseQuest.setAgent(agentAddress, true);
+await openQuest.setAgent(agentAddress, true);
 
 // Agent can now create quests and record completions
 ```
@@ -179,12 +179,12 @@ await baseQuest.setAgent(agentAddress, true);
 
 ### Base Sepolia (Testnet)
 ```
-BaseQuest: 0x... (deploy to get address)
+OpenQuest: 0x... (deploy to get address)
 ```
 
 ### Base Mainnet
 ```
-BaseQuest: 0x... (deploy when ready)
+OpenQuest: 0x... (deploy when ready)
 ```
 
 ## Security Features
@@ -200,12 +200,12 @@ BaseQuest: 0x... (deploy when ready)
 ```typescript
 // Example: Connect to contract from frontend
 import { ethers } from 'ethers';
-import BaseQuestABI from './contracts/BaseQuest.json';
+import OpenQuestABI from './contracts/OpenQuest.json';
 
 const provider = new ethers.BrowserProvider(window.ethereum);
 const contract = new ethers.Contract(
     contractAddress,
-    BaseQuestABI,
+    OpenQuestABI,
     provider
 );
 

@@ -306,7 +306,7 @@ contract OpenQuest is ERC721, Ownable, ReentrancyGuard {
             
             // Generate metadata URI based on quest
             tokenURIs[tokenId] = string(abi.encodePacked(
-                "https://basequest.app/api/badge/",
+                "https://openquest.app/api/badge/",
                 Strings.toString(questId),
                 "/",
                 Strings.toString(uint256(quest.difficulty))

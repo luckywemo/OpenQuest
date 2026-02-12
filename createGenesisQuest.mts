@@ -16,9 +16,9 @@ async function createGenesisQuest() {
 
     try {
         const tx = await contract.createQuest(
-            "Welcome to BaseQuest",
+            "Welcome to OpenQuest",
             "Say hello to the community on our social hub to earn your Genesis badge.",
-            "BaseQuest",
+            "OpenQuest",
             "0x0000000000000000000000000000000000000000", // No target contract needed
             0, // EASY
             2, // SOCIAL

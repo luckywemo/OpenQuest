@@ -1,8 +1,8 @@
 @echo off
-REM BaseQuest + OpenClaw Setup Script
+REM OpenQuest + OpenClaw Setup Script
 
 echo ============================================
-echo BaseQuest + OpenClaw Integration Setup
+echo OpenQuest + OpenClaw Integration Setup
 echo ============================================
 echo.
 
@@ -35,7 +35,7 @@ echo.
 echo 3. In a new terminal, pair WhatsApp:
 echo    openclaw channels login
 echo.
-echo 4. Start BaseQuest frontend:
+echo 4. Start OpenQuest frontend:
 echo    npm run dev
 echo.
 echo ============================================

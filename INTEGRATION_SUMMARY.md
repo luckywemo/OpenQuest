@@ -1,4 +1,4 @@
-# BaseQuest - Multi-Platform Integration Summary
+# OpenQuest - Multi-Platform Integration Summary
 
 ## ✅ What's Integrated
 
@@ -152,13 +152,13 @@ npm run dev
 ## 🏗️ Project Structure
 
 ```
-BaseQuest/
+OpenQuest/
 ├── services/
 │   ├── geminiService.ts         # AI quest generation
 │   ├── twitterBot.ts            # Twitter integration
 │   └── openclawAgent.ts         # Multi-platform messaging
 ├── contracts/
-│   ├── BaseQuest.sol            # Unified smart contract
+│   ├── OpenQuest.sol            # Unified smart contract
 │   └── README.md                # Contract documentation
 ├── bot.ts                       # Unified bot entry point
 ├── App.tsx                      # Web frontend
@@ -246,7 +246,7 @@ BaseQuest/
 - ⏳ Pair WhatsApp via OpenClaw
 
 ### Phase 2: Blockchain
-- [ ] Deploy `BaseQuest.sol` to Base
+- [ ] Deploy OpenQuest.sol to Base
 - [ ] Connect bot to smart contract
 - [ ] Real blockchain monitoring
 - [ ] Actual reward distribution
@@ -302,7 +302,7 @@ openclaw logs --follow   # Monitor logs
 
 ## 🎉 You're All Set!
 
-BaseQuest now has:
+OpenQuest now has:
 - ✅ Twitter bot for public engagement
 - ✅ OpenClaw for private messaging
 - ✅ AI-powered conversations

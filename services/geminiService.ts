@@ -66,7 +66,7 @@ export const generateNewQuest = async (previousQuests: string[]): Promise<Quest>
     const categories = ['DEFI', 'NFT', 'SOCIAL', 'GOVERNANCE'];
     const targetCategory = categories[Math.floor(Math.random() * categories.length)];
 
-    const prompt = `You are BaseQuest, an autonomous agent on the Base network. 
+    const prompt = `You are OpenQuest, an autonomous agent on the Base network. 
 Generate a new onchain quest for real users on the Base blockchain.
 
 PREVIOUS QUESTS (avoid repetition): ${previousQuests.join(', ')}

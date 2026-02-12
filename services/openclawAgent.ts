@@ -172,7 +172,7 @@ async function handleStatsRequest(senderId: string): Promise<string> {
     try {
         const stats = await openQuestContract.getUserStats(userAddress);
 
-        return `📊 Your BaseQuest Stats (Onchain)
+        return `📊 Your OpenQuest Stats (Onchain)
 
 Wallet: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}
 
@@ -210,7 +210,7 @@ async function handleClaimRequest(senderId: string, message: string): Promise<st
         // For the demo, the Agent can "push" the claim if authorized, 
         // or provide a link to the web dashboard.
 
-        return `🎁 To claim your reward for Quest #${questId}, please visit the BaseQuest dashboard:
+        return `🎁 To claim your reward for Quest #${questId}, please visit the OpenQuest dashboard:
         
 https://overriding-carie-prepotently.ngrok-free.dev/profile
 
@@ -275,7 +275,7 @@ Please improve your content and try again!`;
 
 async function handleLeaderboardRequest(): Promise<string> {
     // Mock leaderboard
-    return `🏆 BaseQuest Leaderboard
+    return `🏆 OpenQuest Leaderboard
 
 Top 10 Quest Completers:
 
@@ -322,7 +322,7 @@ async function handleAIConversation(
         }
 
         // Build prompt with context
-        const systemPrompt = `You are BaseQuest, an autonomous AI agent on the Base blockchain.
+        const systemPrompt = `You are OpenQuest, an autonomous AI agent on the Base blockchain.
 
 You help users:
 - Discover onchain quests on Base
@@ -346,12 +346,12 @@ Available Commands:
 - "leaderboard" - See top users
 - "help" - Show all commands`;
 
-        const conversationText = history.map(h => `${h.role === 'user' ? 'User' : 'BaseQuest'}: ${h.content}`).join('\n');
+        const conversationText = history.map(h => `${h.role === 'user' ? 'User' : 'OpenQuest'}: ${h.content}`).join('\n');
 
         // Use getAi().models.generateContent
         const response = await getAi().models.generateContent({
             model: 'gemini-3-flash-preview',
-            contents: `${systemPrompt}\n\nConversation:\n${conversationText}\n\nBaseQuest:`
+            contents: `${systemPrompt}\n\nConversation:\n${conversationText}\n\nOpenQuest:`
         });
 
         const aiResponse = response.text?.trim() || "I'm here to help with quests! Send 'help' to see what I can do.";
@@ -458,7 +458,7 @@ Try "help" to see available commands.`;
 }
 
 function getHelpMessage(): string {
-    return `📖 BaseQuest Commands
+    return `📖 OpenQuest Commands
 
 🔗 Wallet
 • link 0x... - Link your wallet address

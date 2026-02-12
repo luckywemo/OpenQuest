@@ -1,5 +1,5 @@
 {
-  "name": "BaseQuest Autonomous Agent",
+  "name": "OpenQuest Autonomous Agent",
   "description": "An autonomous onchain quest-giver for the Base network, automating quest creation, verification, and reward distribution.",
   "requestFramePermissions": [
     "camera"

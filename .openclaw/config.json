@@ -23,7 +23,7 @@
     "messages": {
         "groupChat": {
             "mentionPatterns": [
-                "@basequest",
+                "@openquest",
                 "@quest",
                 "quest"
             ]
@@ -31,7 +31,7 @@
     },
     "agent": {
         "mode": "rpc",
-        "systemPrompt": "You are BaseQuest, an autonomous quest agent on the Base blockchain. You help users discover and complete onchain quests, track their progress, and claim rewards. Be friendly, helpful, and engaging. Focus on Base ecosystem protocols like Uniswap, Aerodrome, BasePaint, and others."
+        "systemPrompt": "You are OpenQuest, an autonomous quest agent on the Base blockchain. You help users discover and complete onchain quests, track their progress, and claim rewards. Be friendly, helpful, and engaging. Focus on Base ecosystem protocols like Uniswap, Aerodrome, BasePaint, and others."
     },
     "gateway": {
         "port": 18789,
