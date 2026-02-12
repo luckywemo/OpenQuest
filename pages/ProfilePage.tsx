@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAccount, useDisconnect } from 'wagmi';
 import { useProfile, useSignIn } from "@farcaster/auth-kit";
 import { Target, Award, Shield, LogOut, ChevronLeft, UserCircle, Users, MessageCircle } from 'lucide-react';
 import Header from '../components/Header';
 import { Icons } from '../constants';
-import { Identity, Avatar, Name, Address, EthBalance } from '@coinbase/onchainkit/identity';
 import { AgentStats } from '../types';
 
 const ProfilePage: React.FC = () => {
@@ -32,7 +30,7 @@ const ProfilePage: React.FC = () => {
                             <Icons.Logo className="w-12 h-12 object-contain" />
                         </div>
                         <h2 className="text-3xl font-black mb-4 tracking-tighter">IDENTITY REQUIRED</h2>
-                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">Sign in with Farcaster or connect your wallet to access your operative profile and mission records.</p>
+                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">Sign in with Farcaster to access your operative profile and mission records.</p>
                         <Link
                             to="/"
                             className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98] uppercase tracking-widest block"

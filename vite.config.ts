@@ -69,8 +69,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
-      },
-      dedupe: ['wagmi', 'viem', '@tanstack/react-query', 'react', 'react-dom']
+      }
     }
   };
 });

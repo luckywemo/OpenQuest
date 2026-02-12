@@ -2,11 +2,7 @@ import React from 'react';
 import './index.css';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { base } from 'viem/chains';
 import App from './App';
-
-import '@coinbase/onchainkit/styles.css';
 import { AuthKitProvider } from '@farcaster/auth-kit';
 import '@farcaster/auth-kit/styles.css';
 
@@ -27,14 +23,9 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <OnchainKitProvider
-        apiKey={import.meta.env.VITE_CDP_API_KEY}
-        chain={base}
-      >
-        <AuthKitProvider config={farcasterConfig}>
-          <App />
-        </AuthKitProvider>
-      </OnchainKitProvider>
+      <AuthKitProvider config={farcasterConfig}>
+        <App />
+      </AuthKitProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

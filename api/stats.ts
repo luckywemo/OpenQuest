@@ -1,7 +1,6 @@
 import { loadQuests } from '../services/questService';
 import { loadSubmissions } from '../services/submissionService';
-import { createPublicClient, http, formatEther } from 'viem';
-import { base } from 'viem/chains';
+import { ethers } from 'ethers';
 
 export default async function handler(req: any, res: any) {
     if (req.method !== 'GET') {
@@ -12,17 +11,13 @@ export default async function handler(req: any, res: any) {
         const quests = await loadQuests();
         const submissions = await loadSubmissions();
 
-        // Fetch real balance from Base mainnet
-        const publicClient = createPublicClient({
-            chain: base,
-            transport: http()
-        });
-
+        // Fetch real balance from Base mainnet using ethers
         let balance = '0.00 ETH';
         try {
+            const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL || "https://mainnet.base.org");
             const feeRecipient = process.env.VITE_FEE_RECIPIENT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
-            const balanceWei = await publicClient.getBalance({ address: feeRecipient as `0x${string}` });
-            balance = `${parseFloat(formatEther(balanceWei)).toFixed(4)} ETH`;
+            const balanceWei = await provider.getBalance(feeRecipient);
+            balance = `${parseFloat(ethers.formatEther(balanceWei)).toFixed(4)} ETH`;
         } catch (e) {
             console.error('Failed to fetch balance:', e);
         }
