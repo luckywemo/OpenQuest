@@ -52,15 +52,32 @@ export async function addQuest(quest: Quest) {
         const signer = new ethers.Wallet(privateKey, provider);
         const contract = new ethers.Contract(OPENQUEST_ADDRESS, OPENQUEST_ABI, signer);
 
+        // Helper to parse reward amount safely
+        const parseReward = (amount: string | undefined, type: string) => {
+            if (!amount) return 0n;
+            try {
+                // Remove non-numeric chars except . and ,
+                const numericOnly = amount.replace(/[^0-9.,]/g, '');
+                if (!numericOnly) return 0n;
+
+                if (type === 'ERC20') return ethers.parseUnits(numericOnly, 18);
+                return ethers.parseEther(numericOnly);
+            } catch (e) {
+                return 0n;
+            }
+        };
+
         const tx = await contract.createQuest(
             quest.title,
             quest.description,
             quest.protocol,
-            quest.targetContract || "0x0000000000000000000000000000000000000000",
+            quest.targetContract && ethers.isAddress(quest.targetContract)
+                ? ethers.getAddress(quest.targetContract)
+                : "0x0000000000000000000000000000000000000000",
             ["EASY", "MEDIUM", "HARD"].indexOf(quest.difficulty),
             ["DEFI", "NFT", "SOCIAL", "GOVERNANCE"].indexOf(quest.category),
             ["SOULBOUND", "ERC20", "NATIVE"].indexOf(quest.rewardType),
-            quest.rewardAmount ? (quest.rewardType === 'ERC20' ? ethers.parseUnits(quest.rewardAmount, 18) : ethers.parseEther(quest.rewardAmount)) : 0,
+            parseReward(quest.rewardAmount, quest.rewardType),
             "0x0000000000000000000000000000000000000000", // Default reward token for demo
             Math.floor((quest.endTime - quest.startTime) / 1000),
             0 // Unlimited completions

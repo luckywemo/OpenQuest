@@ -28,8 +28,8 @@ const ProfilePage: React.FC = () => {
                 <Header onOpenSubmit={() => { }} />
                 <div className="flex-1 flex items-center justify-center">
                     <div className="glass p-8 md:p-12 rounded-[2.5rem] text-center max-w-md border-blue-500/10 animate-scaleIn">
-                        <div className="w-20 h-20 bg-blue-600/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-blue-500">
-                            <Icons.BaseLogo />
+                        <div className="w-20 h-20 bg-blue-600/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8">
+                            <Icons.Logo className="w-12 h-12 object-contain" />
                         </div>
                         <h2 className="text-3xl font-black mb-4 tracking-tighter">IDENTITY REQUIRED</h2>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">Sign in with Farcaster or connect your wallet to access your operative profile and mission records.</p>
@@ -95,8 +95,8 @@ const ProfilePage: React.FC = () => {
                                 </div>
                             )}
                             {user.fid !== 'N/A' && (
-                                <div className="absolute -bottom-2 -right-2 bg-purple-600 text-white p-1.5 rounded-lg shadow-lg">
-                                    <Icons.BaseLogo />
+                                <div className="absolute -bottom-2 -right-2 bg-purple-600 text-white p-1 rounded-lg shadow-lg">
+                                    <Icons.Logo className="w-5 h-5 object-contain" />
                                 </div>
                             )}
                         </div>

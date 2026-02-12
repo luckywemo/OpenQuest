@@ -21,18 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSubmit }) => {
       <div className="flex justify-between items-center gap-4">
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-500/20">
-            <Icons.BaseLogo />
-          </div>
-          <div className="hidden sm:block">
-            <h1 className="text-xl font-black tracking-tighter flex items-center gap-2">
-              OPENQUEST <span className="text-blue-500 text-[10px] font-mono tracking-normal px-1.5 py-0.5 bg-blue-500/10 rounded">v1.2</span>
-            </h1>
-            <p className="text-[9px] text-slate-500 font-mono uppercase tracking-widest">Autonomous Onchain Agent</p>
-          </div>
-          <div className="sm:hidden">
-            <h1 className="text-lg font-black tracking-tighter">OPENQUEST</h1>
-          </div>
+          <Icons.Logo className="w-12 h-12 object-contain" />
         </Link>
 
         {/* Desktop Navigation */}

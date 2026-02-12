@@ -67,56 +67,79 @@ export async function startMentionListener() {
         return;
     }
 
-    console.log('🟣 Starting Farcaster mention listener (polling via Neynar)...');
+    console.log('🟣 Initializing Farcaster mention listener...');
 
-    // Poll every 30 seconds
-    setInterval(async () => {
-        try {
-            const response = await axios.get(NEYNAR_NOTIFICATIONS_URL, {
-                params: {
-                    signer_uuid: SIGNER_UUID,
-                    type: 'mentions'
-                },
-                headers: {
-                    'api_key': NEYNAR_API_KEY
-                }
-            });
-
-            const notifications = response.data.notifications || [];
-
-            for (const notification of notifications) {
-                const cast = notification.cast;
-                if (!cast || processedNotifications.has(cast.hash)) continue;
-
-                processedNotifications.add(cast.hash);
-
-                // Don't reply to ourselves
-                // Note: In production you'd check cast.author.username vs bot username
-
-                const message = cast.text;
-                const senderId = cast.author.fid.toString();
-                const senderName = cast.author.username;
-
-                console.log(`💬 Farcaster mention from @${senderName}: ${message}`);
-
-                // Strip mention from message
-                const cleanMessage = message.replace(/@\w+/g, '').trim();
-
-                // Get AI response using common agent logic
-                const aiResponse = await openclawAgent.handleMessage(
-                    cleanMessage || "help",
-                    senderId,
-                    'farcaster',
-                    senderName
-                );
-
-                // Post reply
-                await postCast(`@${senderName} ${aiResponse}`, [], cast.hash);
+    try {
+        // First, get the FID associated with this signer
+        const signerResponse = await axios.get(`https://api.neynar.com/v2/farcaster/signer?signer_uuid=${SIGNER_UUID}`, {
+            headers: {
+                'api_key': NEYNAR_API_KEY
             }
-        } catch (error) {
-            console.error('❌ Error polling Farcaster mentions:', error);
+        });
+
+        const fid = signerResponse.data.fid;
+        if (!fid) {
+            console.error('❌ Could not find FID for the provided SIGNER_UUID. Make sure the signer is approved.');
+            return;
         }
-    }, 30000);
+
+        console.log(`✅ Farcaster Bot FID identified: ${fid}`);
+        console.log('🟣 Starting Farcaster mention listener (Polling Mode enabled with Paid Tier)...');
+
+        // Poll every 30 seconds
+        setInterval(async () => {
+            try {
+                const response = await axios.get(NEYNAR_NOTIFICATIONS_URL, {
+                    params: {
+                        fid: fid,
+                        type: 'mentions'
+                    },
+                    headers: {
+                        'api_key': NEYNAR_API_KEY
+                    }
+                });
+
+                const notifications = response.data.notifications || [];
+
+                for (const notification of notifications) {
+                    const cast = notification.cast;
+                    if (!cast || processedNotifications.has(cast.hash)) continue;
+
+                    processedNotifications.add(cast.hash);
+
+                    const message = cast.text;
+                    const senderId = cast.author.fid.toString();
+                    const senderName = cast.author.username;
+
+                    console.log(`💬 Farcaster mention from @${senderName}: ${message}`);
+
+                    // Strip mention from message
+                    const cleanMessage = message.replace(/@\w+/g, '').trim();
+
+                    // Get AI response using common agent logic
+                    const aiResponse = await openclawAgent.handleMessage(
+                        cleanMessage || "help",
+                        senderId,
+                        'farcaster',
+                        senderName
+                    );
+
+                    // Post reply
+                    await postCast(`@${senderName} ${aiResponse}`, [], cast.hash);
+                }
+            } catch (error: any) {
+                if (error.response?.status === 402) {
+                    console.error('⚠️ Farcaster Polling Error: 402 Payment Required. (Your Neynar tier may not support notifications polling, or the upgrade is still processing.)');
+                } else if (error.response?.status === 400) {
+                    console.error('❌ Farcaster Polling Error: 400 Bad Request. Parameters might be incorrect.');
+                } else {
+                    console.error('❌ Error polling Farcaster mentions:', error.message);
+                }
+            }
+        }, 30000);
+    } catch (error: any) {
+        console.error('❌ Failed to initialize Farcaster bot:', error.message);
+    }
 }
 
 /**

@@ -21,10 +21,7 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <nav className="relative max-w-7xl mx-auto px-4 py-6 flex justify-between items-center animate-fadeIn">
-                    <div className="flex items-center gap-3">
-                        <Icons.BaseLogo />
-                        <h1 className="text-2xl font-bold">OpenQuest</h1>
-                    </div>
+                    <Icons.Logo className="w-10 h-10 object-contain" />
 
                     <div className="flex items-center gap-4">
                         <Link to="/quests" className="text-slate-300 hover:text-white transition-all duration-300">
